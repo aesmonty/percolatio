@@ -5,4 +5,4 @@ from rest_framework.status import HTTP_200_OK
 
 class PingAPIView(RetrieveAPIView):
     def retrieve(self, request):
-        return Response({'Hello': 'World'}, status=HTTP_200_OK)
+        return Response({'Hello': 'The backend is working!'}, status=HTTP_200_OK)

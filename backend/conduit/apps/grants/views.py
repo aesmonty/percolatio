@@ -6,21 +6,20 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Article, Comment, Tag
-from .renderers import ArticleJSONRenderer, CommentJSONRenderer
-from .serializers import ArticleSerializer, CommentSerializer, TagSerializer
+from .models import Grant, Tag
+from .renderers import GrantJSONRenderer
+from .serializers import GrantSerializer, TagSerializer
 
 
-class ArticleViewSet(mixins.CreateModelMixin, 
-                     mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
-
+class GrantViewSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
     lookup_field = 'slug'
-    queryset = Article.objects.select_related('author', 'author__user')
+    queryset = Grant.objects.select_related('author', 'author__user')
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    renderer_classes = (ArticleJSONRenderer,)
-    serializer_class = ArticleSerializer
+    renderer_classes = (GrantJSONRenderer,)
+    serializer_class = GrantSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -49,7 +48,7 @@ class ArticleViewSet(mixins.CreateModelMixin,
         serializer_data = request.data.get('article', {})
 
         serializer = self.serializer_class(
-        data=serializer_data, context=serializer_context
+            data=serializer_data, context=serializer_context
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -73,7 +72,7 @@ class ArticleViewSet(mixins.CreateModelMixin,
 
         try:
             serializer_instance = self.queryset.get(slug=slug)
-        except Article.DoesNotExist:
+        except Grant.DoesNotExist:
             raise NotFound('An article with this slug does not exist.')
 
         serializer = self.serializer_class(
@@ -83,21 +82,20 @@ class ArticleViewSet(mixins.CreateModelMixin,
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def update(self, request, slug):
         serializer_context = {'request': request}
 
         try:
             serializer_instance = self.queryset.get(slug=slug)
-        except Article.DoesNotExist:
+        except Grant.DoesNotExist:
             raise NotFound('An article with this slug does not exist.')
-            
+
         serializer_data = request.data.get('article', {})
 
         serializer = self.serializer_class(
-            serializer_instance, 
+            serializer_instance,
             context=serializer_context,
-            data=serializer_data, 
+            data=serializer_data,
             partial=True
         )
         serializer.is_valid(raise_exception=True)
@@ -106,74 +104,23 @@ class ArticleViewSet(mixins.CreateModelMixin,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CommentsListCreateAPIView(generics.ListCreateAPIView):
-    lookup_field = 'article__slug'
-    lookup_url_kwarg = 'article_slug'
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-    queryset = Comment.objects.select_related(
-        'article', 'article__author', 'article__author__user',
-        'author', 'author__user'
-    )
-    renderer_classes = (CommentJSONRenderer,)
-    serializer_class = CommentSerializer
-
-    def filter_queryset(self, queryset):
-        # The built-in list function calls `filter_queryset`. Since we only
-        # want comments for a specific article, this is a good place to do
-        # that filtering.
-        filters = {self.lookup_field: self.kwargs[self.lookup_url_kwarg]}
-
-        return queryset.filter(**filters)
-
-    def create(self, request, article_slug=None):
-        data = request.data.get('comment', {})
-        context = {'author': request.user.profile}
-
-        try:
-            context['article'] = Article.objects.get(slug=article_slug)
-        except Article.DoesNotExist:
-            raise NotFound('An article with this slug does not exist.')
-
-        serializer = self.serializer_class(data=data, context=context)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class CommentsDestroyAPIView(generics.DestroyAPIView):
-    lookup_url_kwarg = 'comment_pk'
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-    queryset = Comment.objects.all()
-
-    def destroy(self, request, article_slug=None, comment_pk=None):
-        try:
-            comment = Comment.objects.get(pk=comment_pk)
-        except Comment.DoesNotExist:
-            raise NotFound('A comment with this ID does not exist.')
-
-        comment.delete()
-
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
-
-
-class ArticlesFavoriteAPIView(APIView):
+class GrantsFavoriteAPIView(APIView):
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (ArticleJSONRenderer,)
-    serializer_class = ArticleSerializer
+    renderer_classes = (GrantJSONRenderer,)
+    serializer_class = GrantSerializer
 
     def delete(self, request, article_slug=None):
         profile = self.request.user.profile
         serializer_context = {'request': request}
 
         try:
-            article = Article.objects.get(slug=article_slug)
-        except Article.DoesNotExist:
-            raise NotFound('An article with this slug was not found.')
+            grant = Grant.objects.get(slug=article_slug)
+        except Grant.DoesNotExist:
+            raise NotFound('A grant with this slug was not found.')
 
-        profile.unfavorite(article)
+        profile.unfavorite(grant)
 
-        serializer = self.serializer_class(article, context=serializer_context)
+        serializer = self.serializer_class(grant, context=serializer_context)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -182,13 +129,13 @@ class ArticlesFavoriteAPIView(APIView):
         serializer_context = {'request': request}
 
         try:
-            article = Article.objects.get(slug=article_slug)
-        except Article.DoesNotExist:
-            raise NotFound('An article with this slug was not found.')
+            grant = Grant.objects.get(slug=article_slug)
+        except Grant.DoesNotExist:
+            raise NotFound('A grant with this slug was not found.')
 
-        profile.favorite(article)
+        profile.favorite(grant)
 
-        serializer = self.serializer_class(article, context=serializer_context)
+        serializer = self.serializer_class(grant, context=serializer_context)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -208,14 +155,14 @@ class TagListAPIView(generics.ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class ArticlesFeedAPIView(generics.ListAPIView):
+class GrantsFeedAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Article.objects.all()
-    renderer_classes = (ArticleJSONRenderer,)
-    serializer_class = ArticleSerializer
+    queryset = Grant.objects.all()
+    renderer_classes = (GrantJSONRenderer,)
+    serializer_class = GrantSerializer
 
     def get_queryset(self):
-        return Article.objects.filter(
+        return Grant.objects.filter(
             author__in=self.request.user.profile.follows.all()
         )
 

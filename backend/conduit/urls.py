@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^ping/', include('conduit.apps.ping.urls', namespace='ping')),
+    url(r'^api/', include('conduit.apps.grants.urls', namespace='grants')),
     url(r'^api/', include('conduit.apps.articles.urls', namespace='articles')),
     url(r'^api/', include('conduit.apps.authentication.urls', namespace='authentication')),
     url(r'^api/', include('conduit.apps.profiles.urls', namespace='profiles')),

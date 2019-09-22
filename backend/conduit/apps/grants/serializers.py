@@ -6,10 +6,12 @@ from .models import Grant, Tag
 from .relations import TagRelatedField
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class GrantSerializer(serializers.ModelSerializer):
     author = ProfileSerializer(read_only=True)
     description = serializers.CharField(required=False)
     slug = serializers.SlugField(required=False)
+    amount = serializers.IntegerField(required=False)
+    grantees = serializers.IntegerField(required=False)
 
     favorited = serializers.SerializerMethodField()
     favoritesCount = serializers.SerializerMethodField(
@@ -31,6 +33,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = (
             'author',
             'body',
+            'amount',
+            'grantees',
             'createdAt',
             'description',
             'favorited',
@@ -72,38 +76,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()
-
-"""
-class CommentSerializer(serializers.ModelSerializer):
-    author = ProfileSerializer(required=False)
-
-    createdAt = serializers.SerializerMethodField(method_name='get_created_at')
-    updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
-
-    class Meta:
-        model = Comment
-        fields = (
-            'id',
-            'author',
-            'body',
-            'createdAt',
-            'updatedAt',
-        )
-
-    def create(self, validated_data):
-        article = self.context['article']
-        author = self.context['author']
-
-        return Comment.objects.create(
-            author=author, article=article, **validated_data
-        )
-
-    def get_created_at(self, instance):
-        return instance.created_at.isoformat()
-
-    def get_updated_at(self, instance):
-        return instance.updated_at.isoformat()
-"""
 
 
 class TagSerializer(serializers.ModelSerializer):

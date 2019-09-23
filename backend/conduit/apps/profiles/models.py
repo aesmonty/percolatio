@@ -37,6 +37,11 @@ class Profile(TimestampedModel):
         related_name='favorited_by'
     )
 
+    favorite_grants = models.ManyToManyField(
+        'grants.Grant',
+        related_name='favorited_grants_by'
+    )
+
 
     def __str__(self):
         return self.user.username
@@ -68,3 +73,15 @@ class Profile(TimestampedModel):
     def has_favorited(self, article):
         """Returns True if we have favorited `article`; else False."""
         return self.favorites.filter(pk=article.pk).exists()
+
+    def favorite_grant(self, grant):
+        """Favorite `grant` if we haven't already favorited it."""
+        self.favorite_grants.add(grant)
+
+    def unfavorite_grant(self, grant):
+        """Unfavorite `grant` if we've already favorited it."""
+        self.favorite_grants.remove(grant)
+
+    def has_favorited_grant(self, grant):
+        """Returns True if we have favorited `grant`; else False."""
+        return self.favorite_grants.filter(pk=grant.pk).exists()

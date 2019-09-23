@@ -32,10 +32,10 @@ class GrantViewSet(mixins.CreateModelMixin,
         if tag is not None:
             queryset = queryset.filter(tags__tag=tag)
 
-        favorited_by = self.request.query_params.get('favorited', None)
-        if favorited_by is not None:
+        favorited_grants_by = self.request.query_params.get('favorited', None)
+        if favorited_grants_by is not None:
             queryset = queryset.filter(
-                favorited_by__user__username=favorited_by
+                favorited_grants_by__user__username=favorited_grants_by
             )
 
         return queryset
@@ -73,7 +73,7 @@ class GrantViewSet(mixins.CreateModelMixin,
         try:
             serializer_instance = self.queryset.get(slug=slug)
         except Grant.DoesNotExist:
-            raise NotFound('An article with this slug does not exist.')
+            raise NotFound('A grant with this slug does not exist.')
 
         serializer = self.serializer_class(
             serializer_instance,
@@ -118,7 +118,7 @@ class GrantsFavoriteAPIView(APIView):
         except Grant.DoesNotExist:
             raise NotFound('A grant with this slug was not found.')
 
-        profile.unfavorite(grant)
+        profile.unfavorite_grant(grant)
 
         serializer = self.serializer_class(grant, context=serializer_context)
 
@@ -133,7 +133,7 @@ class GrantsFavoriteAPIView(APIView):
         except Grant.DoesNotExist:
             raise NotFound('A grant with this slug was not found.')
 
-        profile.favorite(grant)
+        profile.favorite_grant(grant)
 
         serializer = self.serializer_class(grant, context=serializer_context)
 

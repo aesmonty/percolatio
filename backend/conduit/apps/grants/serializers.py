@@ -69,10 +69,10 @@ class GrantSerializer(serializers.ModelSerializer):
         if not request.user.is_authenticated():
             return False
 
-        return request.user.profile.has_favorited(instance)
+        return request.user.profile.has_favorited_grant(instance)
 
     def get_favorites_count(self, instance):
-        return instance.favorited_by.count()
+        return instance.favorited_grants_by.count()
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()

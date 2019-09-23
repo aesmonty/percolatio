@@ -45,7 +45,7 @@ class GrantViewSet(mixins.CreateModelMixin,
             'author': request.user.profile,
             'request': request
         }
-        serializer_data = request.data.get('article', {})
+        serializer_data = request.data.get('grant', {})
 
         serializer = self.serializer_class(
             data=serializer_data, context=serializer_context
@@ -88,9 +88,9 @@ class GrantViewSet(mixins.CreateModelMixin,
         try:
             serializer_instance = self.queryset.get(slug=slug)
         except Grant.DoesNotExist:
-            raise NotFound('An article with this slug does not exist.')
+            raise NotFound('A grant with this slug does not exist.')
 
-        serializer_data = request.data.get('article', {})
+        serializer_data = request.data.get('grant', {})
 
         serializer = self.serializer_class(
             serializer_instance,
@@ -109,12 +109,12 @@ class GrantsFavoriteAPIView(APIView):
     renderer_classes = (GrantJSONRenderer,)
     serializer_class = GrantSerializer
 
-    def delete(self, request, article_slug=None):
+    def delete(self, request, grant_slug=None):
         profile = self.request.user.profile
         serializer_context = {'request': request}
 
         try:
-            grant = Grant.objects.get(slug=article_slug)
+            grant = Grant.objects.get(slug=grant_slug)
         except Grant.DoesNotExist:
             raise NotFound('A grant with this slug was not found.')
 
@@ -124,12 +124,12 @@ class GrantsFavoriteAPIView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, article_slug=None):
+    def post(self, request, grant_slug=None):
         profile = self.request.user.profile
         serializer_context = {'request': request}
 
         try:
-            grant = Grant.objects.get(slug=article_slug)
+            grant = Grant.objects.get(slug=grant_slug)
         except Grant.DoesNotExist:
             raise NotFound('A grant with this slug was not found.')
 

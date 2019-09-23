@@ -15,7 +15,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "f7d19293-b610-4929-b206-0e3e61e0d98b",
 								"exec": [
 									"if (!(environment.isIntegrationTest)) {",
 									"var responseJSON = JSON.parse(responseBody);",
@@ -31,7 +31,8 @@
 									"tests['User has \"token\" property'] = user.hasOwnProperty('token');",
 									"}",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -40,7 +41,9 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "X-Requested-With",
@@ -49,7 +52,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"user\":{\"email\":\"{{EMAIL}}\", \"password\":\"{{PASSWORD}}\", \"username\":\"{{USERNAME}}\"}}"
+							"raw": "{\"user\":{\"email\":\"{{EMAIL}}\", \"password\":\"{{PASSWORD}}\", \"username\":\"{{USERNAME}}\", \"bio\": \"I am a man of wealth and taste\", \"image\": \"image.io\"}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{APIURL}}/users",
@@ -297,7 +305,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "7ba98407-714d-4e64-a8e7-cbd92ab70066",
 								"exec": [
 									"var responseJSON = JSON.parse(responseBody);",
 									"",
@@ -311,7 +319,8 @@
 									"tests['User has \"image\" property'] = user.hasOwnProperty('image');",
 									"tests['User has \"token\" property'] = user.hasOwnProperty('token');",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -320,7 +329,9 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "X-Requested-With",
@@ -1103,7 +1114,7 @@
 									"",
 									"tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
 									"tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
-									"pm.globals.set('slug', grant.slug);",
+									"pm.globals.set('grant-slug', grant.slug);",
 									"",
 									"tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
 									"tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
@@ -1145,7 +1156,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"article\":{\"title\":\"Helium Grant 1\", \"description\":\"Funding crazy ideas on the the Internet\", \"amount\": 1000, \"grantees\": 5 , \"body\":\"Very long description here.\", \"tagList\":[\"oss\",\"ideas\"]}}",
+							"raw": "{\"grant\":{\"title\":\"Helium Grant 1\", \"description\":\"Funding crazy ideas on the the Internet\", \"amount\": 1000, \"grantees\": 5 , \"body\":\"Very long description here.\", \"tagList\":[\"oss\",\"ideas\"]}}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2073,7 +2084,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{APIURL}}/grants?favorited=jane",
+							"raw": "{{APIURL}}/grants?favorited=monty",
 							"host": [
 								"{{APIURL}}"
 							],
@@ -2083,7 +2094,7 @@
 							"query": [
 								{
 									"key": "favorited",
-									"value": "jane"
+									"value": "monty"
 								}
 							]
 						}
@@ -2222,7 +2233,9 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "X-Requested-With",
@@ -2234,17 +2247,17 @@
 							}
 						],
 						"url": {
-							"raw": "{{APIURL}}/articles?favorited=jane",
+							"raw": "{{APIURL}}/grants?favorited=monty",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
-								"articles"
+								"grants"
 							],
 							"query": [
 								{
 									"key": "favorited",
-									"value": "jane"
+									"value": "monty"
 								}
 							]
 						}
@@ -2257,7 +2270,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "96a08e77-41fa-4e3d-8358-9b57a0f6245f",
 								"exec": [
 									"var responseJSON = JSON.parse(responseBody);",
 									"",
@@ -2280,7 +2293,8 @@
 									"tests['Article has \"favoritesCount\" property'] = article.hasOwnProperty('favoritesCount');",
 									"tests['favoritesCount is an integer'] = Number.isInteger(article.favoritesCount);",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -2366,13 +2380,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{APIURL}}/grants/{{slug}}",
+							"raw": "{{APIURL}}/grants/{{grant-slug}}",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
 								"grants",
-								"{{slug}}"
+								"{{grant-slug}}"
 							]
 						}
 					},
@@ -2661,7 +2675,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"article\":{\"body\":\"With two hands\"}}",
+							"raw": "{\"grant\":{\"body\":\"With two hands\"}}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2669,13 +2683,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{APIURL}}/grants/{{slug}}",
+							"raw": "{{APIURL}}/grants/{{grant-slug}}",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
 								"grants",
-								"{{slug}}"
+								"{{grant-slug}}"
 							]
 						}
 					},
@@ -2809,13 +2823,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{APIURL}}/grants/{{slug}}/favorite",
+							"raw": "{{APIURL}}/grants/{{grant-slug}}/favorite",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
 								"grants",
-								"{{slug}}",
+								"{{grant-slug}}",
 								"favorite"
 							]
 						}
@@ -2948,13 +2962,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{APIURL}}/grants/{{slug}}/favorite",
+							"raw": "{{APIURL}}/grants/{{grant-slug}}/favorite",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
 								"grants",
-								"{{slug}}",
+								"{{grant-slug}}",
 								"favorite"
 							]
 						}
@@ -3183,13 +3197,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{APIURL}}/grants/{{slug}}",
+							"raw": "{{APIURL}}/grants/{{grant-slug}}",
 							"host": [
 								"{{APIURL}}"
 							],
 							"path": [
 								"grants",
-								"{{slug}}"
+								"{{grant-slug}}"
 							]
 						}
 					},

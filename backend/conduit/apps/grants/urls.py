@@ -15,7 +15,7 @@ urlpatterns = [
 
     url(r'^grants/feed/?$', GrantsFeedAPIView.as_view()),
 
-    url(r'^grants/(?P<article_slug>[-\w]+)/favorite/?$',
+    url(r'^grants/(?P<grant_slug>[-\w]+)/favorite/?$',
         GrantsFavoriteAPIView.as_view()),
 
     url(r'^tags/?$', TagListAPIView.as_view()),

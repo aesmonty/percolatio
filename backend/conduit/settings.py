@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'conduit.apps.core',
     'conduit.apps.profiles',
     'conduit.apps.grants',
+    'conduit.apps.foundations',
 ]
 
 MIDDLEWARE = [

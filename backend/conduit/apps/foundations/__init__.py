@@ -1,12 +1,12 @@
 from django.apps import AppConfig
 
 
-class ArticlesAppConfig(AppConfig):
-    name = 'conduit.apps.articles'
-    label = 'articles'
-    verbose_name = 'Articles'
+class FoundationsAppConfig(AppConfig):
+    name = 'conduit.apps.foundations'
+    label = 'foundations'
+    verbose_name = 'Foundations'
 
     def ready(self):
-        import conduit.apps.articles.signals
+        import conduit.apps.foundations.signals
 
-default_app_config = 'conduit.apps.articles.ArticlesAppConfig'
+default_app_config = 'conduit.apps.foundations.FoundationsAppConfig'

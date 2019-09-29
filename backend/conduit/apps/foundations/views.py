@@ -77,7 +77,6 @@ class FoundationViewSet(mixins.CreateModelMixin,
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def update(self, request, name):
         serializer_context = {'request': request}
 
@@ -136,3 +135,42 @@ class FoundationsFeedAPIView(generics.ListAPIView):
         )
 
         return self.get_paginated_response(serializer.data)
+
+
+# TODO: Check if this goes here or in Profile API ????
+class ProfileFollowAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (FoundationJSONRenderer,)
+    serializer_class = FoundationSerializer
+
+    def delete(self, request, name=None):
+        follower = self.request.user.profile
+
+        try:
+            foundation = Foundation.objects.get(foundation__name=name)  # TODO: Not sure about his inside ()
+        except Foundation.DoesNotExist:
+            raise NotFound('A foundation with this name was not found.')
+
+        follower.unfollow_foundation(foundation)
+
+        serializer = self.serializer_class(foundation, context={
+            'request': request
+        })
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, name=None):
+        follower = self.request.user.profile
+
+        try:
+            foundation = Foundation.objects.get(foundation__name=name)
+        except Foundation.DoesNotExist:
+            raise NotFound('A foundation with this name was not found.')
+
+        follower.follow_foundation(foundation)
+
+        serializer = self.serializer_class(foundation, context={
+            'request': request
+        })
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

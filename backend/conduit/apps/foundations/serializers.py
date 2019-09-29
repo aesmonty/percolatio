@@ -7,8 +7,10 @@ from .relations import TagRelatedField
 
 
 class FoundationSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(read_only=True) # TODO: Not sure if this should be read_only
+    name = serializers.CharField() # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
+
+    grantees = serializers.CharField(required=False) # TODO: Update to List of Profiles!!!
 
     tagList = TagRelatedField(many=True, required=False, source='tags')
 
@@ -19,6 +21,11 @@ class FoundationSerializer(serializers.ModelSerializer):
     # requirements of the client leak into our API.
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
+    
+    followed = serializers.SerializerMethodField()
+    followersCount = serializers.SerializerMethodField(
+        method_name='get_followers_count'
+    )
 
     founder = ProfileSerializer(read_only=True)
 
@@ -32,6 +39,8 @@ class FoundationSerializer(serializers.ModelSerializer):
             'createdAt',
             'founder',
             'grantees',
+            'followed',
+            'followersCount',
             'tagList',
             'updatedAt',
         )
@@ -50,6 +59,20 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     def get_created_at(self, instance):
         return instance.created_at.isoformat()
+    
+    def get_followed(self, instance):
+        request = self.context.get('request', None)
+
+        if request is None:
+            return False
+
+        if not request.user.is_authenticated():
+            return False
+
+        return request.user.profile.is_following_foundation(instance)
+
+    def get_followers_count(self, instance):
+        return instance.followed_by.count()
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()

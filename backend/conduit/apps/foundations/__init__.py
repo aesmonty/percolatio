@@ -6,7 +6,5 @@ class FoundationsAppConfig(AppConfig):
     label = 'foundations'
     verbose_name = 'Foundations'
 
-    def ready(self):
-        import conduit.apps.foundations.signals
 
 default_app_config = 'conduit.apps.foundations.FoundationsAppConfig'

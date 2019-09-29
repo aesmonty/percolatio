@@ -13,7 +13,7 @@ class Foundation(TimestampedModel):
     # key (or one-to-many) relationship. In this case, one `Profile` can have
     # many `Foundation`s.
     founder = models.ForeignKey(
-        'profiles.Profile', on_delete=models.CASCADE, related_name='foundations'
+        'profiles.Profile', on_delete=models.CASCADE, related_name='org'
     )
 
     grantees = models.ManyToManyField(

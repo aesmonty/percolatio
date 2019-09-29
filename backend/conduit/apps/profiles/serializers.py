@@ -33,3 +33,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         followee = instance
 
         return follower.is_following(followee)
+
+    # TODO: Should this go in Foundation Serializer? What is the aim of this? Find out!
+    def get_following_foundation(self, instance):
+        return None

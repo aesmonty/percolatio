@@ -32,6 +32,12 @@ class Profile(TimestampedModel):
         symmetrical=False
     )
 
+    follows_foundation = models.ManyToManyField(
+        'foundations.Foundation',
+        related_name='followed_by',
+        symmetrical=False
+    )
+
     favorites = models.ManyToManyField(
         'articles.Article',
         related_name='favorited_by'
@@ -41,7 +47,6 @@ class Profile(TimestampedModel):
         'grants.Grant',
         related_name='favorited_grants_by'
     )
-
 
     def __str__(self):
         return self.user.username
@@ -61,6 +66,18 @@ class Profile(TimestampedModel):
     def is_followed_by(self, profile):
         """Returns True if `profile` is following us; False otherwise."""
         return self.followed_by.filter(pk=profile.pk).exists()
+
+    def follow_foundation(self, foundation):
+        """Follow `foundation` if we're not already following `foundation`."""
+        self.follows_foundation.add(foundation)
+
+    def unfollow_foundation(self, foundation):
+        """Unfollow `foundation` if we're already following `foundation`."""
+        self.follows_foundation.remove(foundation)
+
+    def is_following_foundation(self, foundation):
+        """Returns True if we're following `foundation`; False otherwise."""
+        return self.follows_foundation.filter(pk=foundation.pk).exists()
 
     def favorite(self, article):
         """Favorite `article` if we haven't already favorited it."""

@@ -22,7 +22,7 @@ class Grant(TimestampedModel):
     # TODO: author -> foundation (when foundation is ready).
     # foundation = models.ForeignKey(
     #       'foundations.Foundation', on_delete=models.CASCADE, related_name='grants'
-    # (
+    # )
     author = models.ForeignKey(
         'profiles.Profile', on_delete=models.CASCADE, related_name='grants'
     )

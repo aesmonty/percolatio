@@ -115,7 +115,7 @@ class TagListAPIView(generics.ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class ArticlesFeedAPIView(generics.ListAPIView):
+class FoundationsFeedAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Foundation.objects.all()
     renderer_classes = (FoundationJSONRenderer,)

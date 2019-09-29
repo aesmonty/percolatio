@@ -7,7 +7,7 @@ from .relations import TagRelatedField
 
 
 class FoundationSerializer(serializers.ModelSerializer):
-    name = ProfileSerializer(read_only=True)
+    name = serializers.CharField(read_only=True) # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
 
     tagList = TagRelatedField(many=True, required=False, source='tags')
@@ -20,49 +20,36 @@ class FoundationSerializer(serializers.ModelSerializer):
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
 
+    founder = ProfileSerializer(read_only=True)
+
+    # TODO: Serialize grantees field in Foundation? Maybe need to create smth like TagRelatedField
+
     class Meta:
         model = Foundation
         fields = (
-            'author',
-            'body',
-            'createdAt',
+            'name',
             'description',
-            'favorited',
-            'favoritesCount',
-            'slug',
+            'createdAt',
+            'founder',
+            'grantees',
             'tagList',
-            'title',
             'updatedAt',
         )
 
     def create(self, validated_data):
-        author = self.context.get('author', None)
+        founder = self.context.get('founder', None)
 
         tags = validated_data.pop('tags', [])
 
-        article = Foundation.objects.create(author=author, **validated_data)
+        foundation = Foundation.objects.create(founder=founder, **validated_data)
 
         for tag in tags:
-            article.tags.add(tag)
+            foundation.tags.add(tag)
 
-        return article
+        return foundation
 
     def get_created_at(self, instance):
         return instance.created_at.isoformat()
-
-    def get_favorited(self, instance):
-        request = self.context.get('request', None)
-
-        if request is None:
-            return False
-
-        if not request.user.is_authenticated():
-            return False
-
-        return request.user.profile.has_favorited(instance)
-
-    def get_favorites_count(self, instance):
-        return instance.favorited_by.count()
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()

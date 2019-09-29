@@ -13,21 +13,23 @@ class Foundation(TimestampedModel):
     # key (or one-to-many) relationship. In this case, one `Profile` can have
     # many `Foundation`s.
     founder = models.ForeignKey(
-        'profiles.Profile', on_delete=models.CASCADE, related_name='grants'
+        'profiles.Profile', on_delete=models.CASCADE, related_name='foundations'
     )
 
-    grants = models.ManyToManyField(
-        'grants.Grant', related_name='grants'
+    grantees = models.ManyToManyField(
+        'profiles.Profile', related_name='foundations'
     )
 
     tags = models.ManyToManyField(
-        'grants.Tag', related_name='grants'
+        'foundations.Tag', related_name='foundations'
     )
 
     def __str__(self):
         return self.name
 
 
+# TODO: Tag class is both in grant and foundation app (fix this).
+# TODO: Also, there should be some sort of relationship between the tags of a foundations and its grants.
 class Tag(TimestampedModel):
     tag = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, unique=True)  # TODO: Is this the slug of the tag?

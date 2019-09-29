@@ -1028,6 +1028,365 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Foundations",
+			"item": [
+				{
+					"name": "All Foundations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundations\" property'] = responseJSON.hasOwnProperty('foundations');",
+									"    tests['Response contains \"foundationsCount\" property'] = responseJSON.hasOwnProperty('foundationsCount');",
+									"    tests['foundationsCount is an integer'] = Number.isInteger(responseJSON.foundationsCount);",
+									"",
+									"    if(responseJSON.foundations.length){",
+									"        var foundation = responseJSON.foundations[0];",
+									"",
+									"        tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"        tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"        tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"        tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"        tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"        tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"        tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"        tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"        tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"        tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"        tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"        tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"        tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									"    } else {",
+									"        tests['followersCount is 0 when feed is empty'] = responseJSON.followersCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Foundations Followed by Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd6d9e3e-6f42-4d30-9218-b0a57d68c7e4",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"    ",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?favorited=jane",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "favorited",
+									"value": "jane"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Foundations by Tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b03a4c2e-5e05-4a1d-9046-6e097a3d6674",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundations\" property'] = responseJSON.hasOwnProperty('foundations');",
+									"    tests['Response contains \"foundationsCount\" property'] = responseJSON.hasOwnProperty('foundationsCount');",
+									"    tests['foundationsCount is an integer'] = Number.isInteger(responseJSON.foundationsCount);",
+									"",
+									"    if(responseJSON.foundations.length){",
+									"        var foundation = responseJSON.foundations[0];",
+									"",
+									"        tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"        tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"        tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"        tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"        tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"        tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"        tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"        tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"        tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"        tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"        tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"        tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"        tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									"    } else {",
+									"        tests['followersCount is 0 when feed is empty'] = responseJSON.followersCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations?tag=ideas",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "ideas"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Follow Foundation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a80269a9-d7af-4f8e-9eba-79092cef558b",
+								"exec": [
+									"if (!(environment.isIntegrationTest)) {",
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundation\" property'] = responseJSON.hasOwnProperty('foundation');",
+									"    ",
+									"    var foundation = responseJSON.foundation || {};",
+									"    ",
+									"    tests['Foundation has \"name\" property'] = profile.hasOwnProperty('name');",
+									"    tests['Foundation has \"description\" property'] = profile.hasOwnProperty('description');",
+									"    tests['Foundation has \"following\" property'] = foundation.hasOwnProperty('following');",
+									"    tests['Foundation\\'s \"following\" property is true'] = foundation.following === true;",
+									"}",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user\":{\"email\":\"{{EMAIL}}\"}}"
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations/{{FOUND_NAME}}/follow",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations",
+								"{{FOUND_NAME}}",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow Foundation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42653799-07f1-46f0-bb7c-62ff4760e257",
+								"exec": [
+									"if (!(environment.isIntegrationTest)) {",
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundation\" property'] = responseJSON.hasOwnProperty('foundation');",
+									"    ",
+									"    var foundation = responseJSON.foundation || {};",
+									"    ",
+									"    tests['Foundation has \"name\" property'] = profile.hasOwnProperty('name');",
+									"    tests['Foundation has \"description\" property'] = profile.hasOwnProperty('description');",
+									"    tests['Foundation has \"following\" property'] = foundation.hasOwnProperty('following');",
+									"    tests['Foundation\\'s \"following\" property is false'] = foundation.following === false;",
+									"}",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations/{{FOUND_NAME}}/follow",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations",
+								"{{FOUND_NAME}}",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Articles, Grants, Favorite, Comments",
 			"item": [
 				{
@@ -1170,6 +1529,78 @@
 							],
 							"path": [
 								"grants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Foundation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e711dbf8-8065-4ba8-8b74-f1639a7d8208",
+								"exec": [
+									"var responseJSON = JSON.parse(responseBody);",
+									"",
+									"tests['Response contains \"foundation\" property'] = responseJSON.hasOwnProperty('foundation');",
+									"",
+									"var foundation = responseJSON.foundation || {};",
+									"",
+									"tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"foundation\":{\"name\":\"{{FOUND_NAME}}\", \"description\":\"Funding ideas to accelereate progress\", \"tagList\":[\"research\",\"ideas\", \"progress\"]}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
 							]
 						}
 					},
@@ -1472,6 +1903,75 @@
 					"response": []
 				},
 				{
+					"name": "All Foundations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundations\" property'] = responseJSON.hasOwnProperty('foundations');",
+									"    tests['Response contains \"foundationsCount\" property'] = responseJSON.hasOwnProperty('foundationsCount');",
+									"    tests['foundationsCount is an integer'] = Number.isInteger(responseJSON.foundationsCount);",
+									"",
+									"    if(responseJSON.foundations.length){",
+									"        var foundation = responseJSON.foundations[0];",
+									"",
+									"        tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"        tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"        tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"        tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"        tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"        tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"        tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"        tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"        tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"        tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"        tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"        tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"        tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									"    } else {",
+									"        tests['followersCount is 0 when feed is empty'] = responseJSON.followersCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "All Articles with auth",
 					"event": [
 						{
@@ -1615,6 +2115,80 @@
 							],
 							"path": [
 								"grants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Foundations with auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundations\" property'] = responseJSON.hasOwnProperty('foundations');",
+									"    tests['Response contains \"foundationsCount\" property'] = responseJSON.hasOwnProperty('foundationsCount');",
+									"    tests['foundationsCount is an integer'] = Number.isInteger(responseJSON.foundationsCount);",
+									"",
+									"    if(responseJSON.foundations.length){",
+									"        var foundation = responseJSON.foundations[0];",
+									"",
+									"        tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"        tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"        tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"        tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"        tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"        tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"        tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"        tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"        tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"        tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"        tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"        tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"        tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									"    } else {",
+									"        tests['followersCount is 0 when feed is empty'] = responseJSON.followersCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
 							]
 						}
 					},
@@ -2102,6 +2676,88 @@
 					"response": []
 				},
 				{
+					"name": "Foundations Followed by Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5fab75a5-995f-4140-bf6a-c56155b55ae8",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?favorited=monty",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "favorited",
+									"value": "monty"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Articles Favorited by Username with auth",
 					"event": [
 						{
@@ -2182,6 +2838,90 @@
 				},
 				{
 					"name": "Grants Favorited by Username with auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf870331-ea82-47f7-aee3-2a1a1fa79d59",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?favorited=monty",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "favorited",
+									"value": "monty"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Foundations Followed by Username with auth",
 					"event": [
 						{
 							"listen": "test",
@@ -2393,6 +3133,67 @@
 					"response": []
 				},
 				{
+					"name": "Single Foundation by name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e8758e5-8b6e-4b92-938a-ef2b85817e1c",
+								"exec": [
+									"var responseJSON = JSON.parse(responseBody);",
+									"",
+									"tests['Response contains \"foundation\" property'] = responseJSON.hasOwnProperty('foundation');",
+									"",
+									"var foundation = responseJSON.foundation || {};",
+									"",
+									"tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations/{{FOUND_NAME}}",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations",
+								"{{FOUND_NAME}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Articles by Tag",
 					"event": [
 						{
@@ -2550,6 +3351,81 @@
 					"response": []
 				},
 				{
+					"name": "Foundations by Tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b03a4c2e-5e05-4a1d-9046-6e097a3d6674",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"foundations\" property'] = responseJSON.hasOwnProperty('foundations');",
+									"    tests['Response contains \"foundationsCount\" property'] = responseJSON.hasOwnProperty('foundationsCount');",
+									"    tests['foundationsCount is an integer'] = Number.isInteger(responseJSON.foundationsCount);",
+									"",
+									"    if(responseJSON.foundations.length){",
+									"        var foundation = responseJSON.foundations[0];",
+									"",
+									"        tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"        tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"        tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"        tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"        tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"        tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"        tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"        tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"        tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"        tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"        tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"        tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"        tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);",
+									"    } else {",
+									"        tests['followersCount is 0 when feed is empty'] = responseJSON.followersCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations?tag=oss",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "oss"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update Article",
 					"event": [
 						{
@@ -2690,6 +3566,78 @@
 							"path": [
 								"grants",
 								"{{grant-slug}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Foundation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8c93685c-e7ac-46aa-be1c-c2382561feca",
+								"exec": [
+									"var responseJSON = JSON.parse(responseBody);",
+									"",
+									"tests['Response contains \"foundation\" property'] = responseJSON.hasOwnProperty('foundation');",
+									"",
+									"var foundation = responseJSON.foundation || {};",
+									"",
+									"tests['Foundation has \"name\" property'] = foundation.hasOwnProperty('name');",
+									"tests['Foundation has \"grantees\" property'] = foundation.hasOwnProperty('grantees');",
+									"tests['Foundation has \"createdAt\" property'] = foundation.hasOwnProperty('createdAt');",
+									"tests['Foundation\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.createdAt);",
+									"tests['Foundation has \"updatedAt\" property'] = foundation.hasOwnProperty('updatedAt');",
+									"tests['Foundation\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(foundation.updatedAt);",
+									"tests['Foundation has \"description\" property'] = foundation.hasOwnProperty('description');",
+									"tests['Foundation has \"tagList\" property'] = foundation.hasOwnProperty('tagList');",
+									"tests['Foundation\\'s \"tagList\" property is an Array'] = Array.isArray(foundation.tagList);",
+									"tests['Foundation has \"founder\" property'] = foundation.hasOwnProperty('founder');",
+									"tests['Foundation has \"followed\" property'] = foundation.hasOwnProperty('followed');",
+									"tests['Foundation has \"followersCount\" property'] = foundation.hasOwnProperty('followersCount');",
+									"tests['followersCount is an integer'] = Number.isInteger(foundation.followersCount);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"foundation\":{\"description\":\"Updated description of foundation.\"}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations/{{FOUND_NAME}}",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations",
+								"{{FOUND_NAME}}"
 							]
 						}
 					},
@@ -3204,6 +4152,41 @@
 							"path": [
 								"grants",
 								"{{grant-slug}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Foundation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations/{{FOUND_NAME}}",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations",
+								"{{FOUND_NAME}}"
 							]
 						}
 					},

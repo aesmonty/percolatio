@@ -46,10 +46,7 @@ class FoundationViewSet(mixins.CreateModelMixin,
             data=foundation_serialized_data, context=context
         )
 
-        try:
-            serializer_instance = self.queryset.get(name=name)
-        except Foundation.DoesNotExist:
-            raise NotFound('A foundation with this name does not exist.')
+        # TODO: Error when we create foundations with same name
 
         foundation.is_valid(raise_exception=True)
         foundation.save()

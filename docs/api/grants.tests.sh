@@ -2,13 +2,14 @@
 set -x
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+SCRIPTDIR+="/postmanScripts/"
 
 APIURL=${APIURL:-http://127.0.0.1:8000/api}
 USERNAME=${USERNAME:-u`date +%s`}
 EMAIL=${EMAIL:-$USERNAME@mail.com}
 PASSWORD=${PASSWORD:-password}
 
-npx newman run $SCRIPTDIR/Percolatio.postman_collection.json \
+npx newman run $SCRIPTDIR/Percolatio.grants.postmam_collection.json \
   --delay-request 500 \
   --global-var "APIURL=$APIURL" \
   --global-var "USERNAME=$USERNAME" \

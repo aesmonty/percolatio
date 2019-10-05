@@ -7,10 +7,10 @@
 	},
 	"item": [
 		{
-			"name": "Grants",
+			"name": "Foundation",
 			"item": [
 				{
-					"name": "All Grants",
+					"name": "All Foundations",
 					"event": [
 						{
 							"listen": "test",

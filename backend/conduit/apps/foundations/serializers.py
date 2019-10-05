@@ -7,10 +7,11 @@ from .relations import TagRelatedField
 
 
 class FoundationSerializer(serializers.ModelSerializer):
-    name = serializers.CharField() # TODO: Not sure if this should be read_only
+    name = serializers.CharField()  # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
 
-    grantees = serializers.CharField(required=False) # TODO: Update to List of Profiles!!!
+    # TODO: Update to List of Profiles!!!
+    grantees = serializers.CharField(required=False)
 
     tagList = TagRelatedField(many=True, required=False, source='tags')
 
@@ -21,7 +22,7 @@ class FoundationSerializer(serializers.ModelSerializer):
     # requirements of the client leak into our API.
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
-    
+
     followed = serializers.SerializerMethodField()
     followersCount = serializers.SerializerMethodField(
         method_name='get_followers_count'
@@ -47,10 +48,9 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         founder = self.context.get('founder', None)
-
         tags = validated_data.pop('tags', [])
-
-        foundation = Foundation.objects.create(founder=founder, **validated_data)
+        foundation = Foundation.objects.create(
+            founder=founder, **validated_data)
 
         for tag in tags:
             foundation.tags.add(tag)
@@ -59,7 +59,7 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     def get_created_at(self, instance):
         return instance.created_at.isoformat()
-    
+
     def get_followed(self, instance):
         request = self.context.get('request', None)
 

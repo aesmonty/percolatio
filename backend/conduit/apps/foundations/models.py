@@ -1,17 +1,16 @@
 from django.db import models
+import uuid
 
 from conduit.apps.core.models import TimestampedModel
 
 
 class Foundation(TimestampedModel):
     name = models.CharField(db_index=True, max_length=255)
-
+    foundationID = models.CharField(
+        max_length=100, blank=True, unique=True, default=uuid.uuid4)
     description = models.TextField()
 
     # Every foundation must have at least one founder.
-    # Unlike the `User` <-> `Profile` relationship, this is a simple foreign
-    # key (or one-to-many) relationship. In this case, one `Profile` can have
-    # many `Foundation`s.
     founder = models.ForeignKey(
         'profiles.Profile', on_delete=models.CASCADE, related_name='org'
     )
@@ -32,7 +31,8 @@ class Foundation(TimestampedModel):
 # TODO: Also, there should be some sort of relationship between the tags of a foundations and its grants.
 class Tag(TimestampedModel):
     tag = models.CharField(max_length=255)
-    slug = models.SlugField(db_index=True, unique=True)  # TODO: Is this the slug of the tag?
+    # TODO: Is this the slug of the tag?
+    slug = models.SlugField(db_index=True, unique=True)
 
     def __str__(self):
         return self.tag

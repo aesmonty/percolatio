@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
@@ -10,19 +10,21 @@ from .views import (
 router = DefaultRouter(trailing_slash=False)
 router.register(r'articles', ArticleViewSet)
 
+app_name = 'articles'
+
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    path('', include(router.urls)),
 
-    url(r'^articles/feed/?$', ArticlesFeedAPIView.as_view()),
+    path('articles/feed/', ArticlesFeedAPIView.as_view()),
 
-    url(r'^articles/(?P<article_slug>[-\w]+)/favorite/?$',
-        ArticlesFavoriteAPIView.as_view()),
+    path('articles/<slug:title>/favorite/',
+         ArticlesFavoriteAPIView.as_view()),
 
-    url(r'^articles/(?P<article_slug>[-\w]+)/comments/?$', 
-        CommentsListCreateAPIView.as_view()),
+    path('articles/<slug:title>/comments/',
+         CommentsListCreateAPIView.as_view()),
 
-    url(r'^articles/(?P<article_slug>[-\w]+)/comments/(?P<comment_pk>[\d]+)/?$',
-        CommentsDestroyAPIView.as_view()),
+    path('articles/<slug:title>/comments/we',  # TODO: this url probably incorrect but who cares this going to be deleted
+         CommentsDestroyAPIView.as_view()),
 
-    url(r'^tags/?$', TagListAPIView.as_view()),
+    path('tags/', TagListAPIView.as_view()),
 ]

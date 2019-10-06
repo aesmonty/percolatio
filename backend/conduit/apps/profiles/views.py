@@ -1,5 +1,5 @@
 from rest_framework import serializers, status
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -14,17 +14,19 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
     permission_classes = (AllowAny,)
     queryset = Profile.objects.select_related('user')
     renderer_classes = (ProfileJSONRenderer,)
-    serializer_class = ProfileSerializer
+    profile_serializer = ProfileSerializer
 
     def retrieve(self, request, username, *args, **kwargs):
-        # Try to retrieve the requested profile and throw an exception if the
-        # profile could not be found.
+
+        if username is None or username.isspace():
+            raise ParseError("username cannot be empty")
+
         try:
             profile = self.queryset.get(user__username=username)
         except Profile.DoesNotExist:
             raise NotFound('A profile with this username does not exist.')
 
-        serializer = self.serializer_class(profile, context={
+        serializer = self.profile_serializer(profile, context={
             'request': request
         })
 
@@ -34,7 +36,7 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
 class ProfileFollowAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (ProfileJSONRenderer,)
-    serializer_class = ProfileSerializer
+    profile_serializer = ProfileSerializer
 
     def delete(self, request, username=None):
         follower = self.request.user.profile
@@ -46,7 +48,7 @@ class ProfileFollowAPIView(APIView):
 
         follower.unfollow(followee)
 
-        serializer = self.serializer_class(followee, context={
+        serializer = self.profile_serializer(followee, context={
             'request': request
         })
 
@@ -65,7 +67,7 @@ class ProfileFollowAPIView(APIView):
 
         follower.follow(followee)
 
-        serializer = self.serializer_class(followee, context={
+        serializer = self.profile_serializer(followee, context={
             'request': request
         })
 

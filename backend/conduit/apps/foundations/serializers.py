@@ -66,7 +66,7 @@ class FoundationSerializer(serializers.ModelSerializer):
         if request is None:
             return False
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return False
 
         return request.user.profile.is_following_foundation(instance)

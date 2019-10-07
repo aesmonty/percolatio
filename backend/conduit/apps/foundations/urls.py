@@ -1,18 +1,19 @@
-from django.conf.urls import include, url
+from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    FoundationViewSet, FoundationsFeedAPIView, TagListAPIView
+    FoundationViewSet, FoundationsFeedAPIView, TagListAPIView, ProfileFollowAPIView
 )
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'foundations', FoundationViewSet)
 
+app_name = 'foundations'
+
 urlpatterns = [
-    url(r'^', include(router.urls)),
-
-    url(r'^foundations/feed/?$', FoundationsFeedAPIView.as_view()),
-
-    url(r'^tags/?$', TagListAPIView.as_view()),
+    path('', include(router.urls)),
+    path('foundations/feed/', FoundationsFeedAPIView.as_view()),
+    path('foundations/<name>/follow/', ProfileFollowAPIView.as_view()),
+    # path(r'^tags/?$', TagListAPIView.as_view()),
 ]

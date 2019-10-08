@@ -18,6 +18,8 @@ class FollowingAPIView(RetrieveAPIView):
     foundation_serializer = FoundationSerializer
 
     def retrieve(self, request, username, *args, **kwargs):
+        # NOTE: This query set can easily be modified to return only the foundations
+        #       that the profile owns. This could either be a parameter in this request or a new endpoint.
         queryset = self.get_queryset(username)
         page = self.paginate_queryset(queryset)
 

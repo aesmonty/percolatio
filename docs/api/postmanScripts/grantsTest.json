@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "a1fc3468-0112-4a8e-b5d9-7d4936311c2d",
+		"name": "Percolatio",
+		"description": "Collection for testing the Percolatio API\n\nhttps://github.com/gothinkster/realworld",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Grants",
+			"item": [
+				{
+					"name": "All Grants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Grants by Foundation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0e673861-b49e-4287-b451-01b2004ca7e9",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?author=johnjacob",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "author",
+									"value": "johnjacob"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Grants Favorited by Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd6d9e3e-6f42-4d30-9218-b0a57d68c7e4",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"    ",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?favorited=jane",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "favorited",
+									"value": "jane"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Grants by Tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b03a4c2e-5e05-4a1d-9046-6e097a3d6674",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									"",
+									"if(is200Response){",
+									"    var responseJSON = JSON.parse(responseBody);",
+									"",
+									"    tests['Response contains \"grants\" property'] = responseJSON.hasOwnProperty('grants');",
+									"    tests['Response contains \"grantsCount\" property'] = responseJSON.hasOwnProperty('grantsCount');",
+									"    tests['grantsCount is an integer'] = Number.isInteger(responseJSON.grantsCount);",
+									"",
+									"    if(responseJSON.grants.length){",
+									"        var grant = responseJSON.grants[0];",
+									"",
+									"        tests['Grant has \"title\" property'] = grant.hasOwnProperty('title');",
+									"        tests['Grant has \"slug\" property'] = grant.hasOwnProperty('slug');",
+									"        tests['Grant has \"body\" property'] = grant.hasOwnProperty('body');",
+									"        tests['Grant has \"amount\" property'] = grant.hasOwnProperty('amount');",
+									"        tests['Grant has \"grantees\" property'] = grant.hasOwnProperty('grantees');",
+									"        tests['Grant has \"createdAt\" property'] = grant.hasOwnProperty('createdAt');",
+									"        tests['Grant\\'s \"createdAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.createdAt);",
+									"        tests['Grant has \"updatedAt\" property'] = grant.hasOwnProperty('updatedAt');",
+									"        tests['Grant\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = /^\\d{4,}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d.\\d+(?:[+-][0-2]\\d:[0-5]\\d|Z)$/.test(grant.updatedAt);",
+									"        tests['Grant has \"description\" property'] = grant.hasOwnProperty('description');",
+									"        tests['Grant has \"tagList\" property'] = grant.hasOwnProperty('tagList');",
+									"        tests['Grant\\'s \"tagList\" property is an Array'] = Array.isArray(grant.tagList);",
+									"        tests['Grant has \"author\" property'] = grant.hasOwnProperty('author');",
+									"        tests['Grant has \"favorited\" property'] = grant.hasOwnProperty('favorited');",
+									"        tests['Grant has \"favoritesCount\" property'] = grant.hasOwnProperty('favoritesCount');",
+									"        tests['favoritesCount is an integer'] = Number.isInteger(grant.favoritesCount);",
+									"    } else {",
+									"        tests['grantsCount is 0 when feed is empty'] = responseJSON.grantsCount === 0;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/grants?tag=dragons",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"grants"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "dragons"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7f9a55da-e7b4-490c-ac79-16303d2dbed8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "fe3fdc2c-1b05-40f8-b32a-4a11052025f6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -41,16 +41,16 @@ class FoundationViewSet(mixins.CreateModelMixin,
             'request': request
         }
 
-        foundation_serialized_data = request.data.get('foundation', {})
-        foundation = self.foundation_serializer(
-            data=foundation_serialized_data, context=context
+        foundation = request.data.get('foundation', {})
+        foundation_serialized = self.foundation_serializer(
+            data=foundation, context=context
         )
 
         # TODO: Error when we create foundations with same name
 
-        foundation.is_valid(raise_exception=True)
-        foundation.save()
-        return Response(foundation.data, status=status.HTTP_201_CREATED)
+        foundation_serialized.is_valid(raise_exception=True)
+        foundation_serialized.save()
+        return Response(foundation_serialized.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         serializer_context = {'request': request}
@@ -65,34 +65,34 @@ class FoundationViewSet(mixins.CreateModelMixin,
         return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, name):
-        serializer_context = {'request': request}
+        context = {'request': request}
 
         try:
-            serializer_instance = self.queryset.get(name=name)
+            foundation = self.queryset.get(name=name)
         except Foundation.DoesNotExist:
             raise NotFound('A foundation with this name does not exist.')
 
-        serializer = self.foundation_serializer(
-            serializer_instance,
-            context=serializer_context
+        foundation_serialized = self.foundation_serializer(
+            foundation,
+            context=context
         )
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(foundation_serialized.data, status=status.HTTP_200_OK)
 
     def update(self, request, name):
-        serializer_context = {'request': request}
+        context = {'request': request}
 
         try:
-            serializer_instance = self.queryset.get(name=name)
+            original_foundation = self.queryset.get(name=name)
         except Foundation.DoesNotExist:
             raise NotFound('A foundation with this name does not exist.')
 
-        serializer_data = request.data.get('foundation', {})
+        new_foundation = request.data.get('foundation', {})
 
         serializer = self.foundation_serializer(
-            serializer_instance,
-            context=serializer_context,
-            data=serializer_data,
+            original_foundation,
+            context=context,
+            data=new_foundation,
             partial=True
         )
         serializer.is_valid(raise_exception=True)

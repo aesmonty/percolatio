@@ -1,2 +1,2 @@
-from .profileRetrieveAPIView import *
-from .followingAPIView import *
+from .profileRetrieveAPIView import ProfileRetrieveAPIView
+from .followingAPIView import FollowingAPIView

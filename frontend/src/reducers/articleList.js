@@ -59,6 +59,9 @@ export default (state = {}, action) => {
     case HOME_PAGE_UNLOADED:
       return {};
     case CHANGE_TAB:
+      if (action.tab !== 'all') {
+        return state;
+      }
       return {
         ...state,
         pager: action.pager,

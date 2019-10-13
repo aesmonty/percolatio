@@ -10,6 +10,8 @@ from .views import (
 router = DefaultRouter(trailing_slash=False)
 router.register(r'grants', GrantViewSet)
 
+app_name = 'grants'
+
 urlpatterns = [
     url(r'^', include(router.urls)),
 

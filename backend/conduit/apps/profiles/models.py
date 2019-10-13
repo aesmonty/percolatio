@@ -30,7 +30,7 @@ class Profile(TimestampedModel):
 
     favorite_grants = models.ManyToManyField(
         'grants.Grant',
-        related_name='favorited_by'
+        related_name='favorited_grants_by'
     )
 
     def __str__(self):

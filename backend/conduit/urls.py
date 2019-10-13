@@ -7,9 +7,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('ping/', include('conduit.apps.ping.urls', namespace='ping')),
+
     path('api/', include('conduit.apps.articles.urls', namespace='articles')),
     path('api/', include('conduit.apps.authentication.urls',
                          namespace='authentication')),
-    path('api/', include('conduit.apps.profiles.urls', namespace='profiles')),
     path('api/', include('conduit.apps.foundations.urls', namespace='foundations')),
+    path('api/', include('conduit.apps.grants.urls', namespace='grants')),
+    path('api/', include('conduit.apps.profiles.urls', namespace='profiles')),
 ]

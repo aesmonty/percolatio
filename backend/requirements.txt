@@ -1,6 +1,10 @@
+autopep8==1.4.4
 Django==2.2.6
 django-cors-middleware==1.4.0
 django-extensions==2.2.3
 djangorestframework==3.10.3
+pycodestyle==2.5.0
 PyJWT==1.4.2
+pytz==2019.3
 six==1.10.0
+sqlparse==0.3.0

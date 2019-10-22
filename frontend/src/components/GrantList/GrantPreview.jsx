@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Button, Card } from 'antd';
+import 'antd/dist/antd.css';
 
 const mapDispatchToProps = () => ({
   favorite: () => (
@@ -15,11 +16,12 @@ const GrantPreview = (props) => {
   const { title, slug, author } = grant;
 
   return (
-    <div>
-      <p>{`title: ${title}`}</p>
+
+    <Card title={title} extra={<Button type="primary">Apply</Button>} style={{ marginTop: '50px' }}>
       <p>{`slug: ${slug}`}</p>
       <p>{`author: ${author.username}`}</p>
-    </div>
+
+    </Card>
   );
 };
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "10ac2f6a-0d75-4836-97f9-3a1689ebb0fa",
+		"_postman_id": "e4c8056a-dc39-471d-b0b5-17f13ad9adea",
 		"name": "Percolatio",
 		"description": "Collection for testing the Percolatio API\n\nReferenced from:\nhttps://github.com/gothinkster/realworld",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -295,7 +295,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Articles",
@@ -594,7 +595,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Articles, Favorite, Comments",
@@ -1770,7 +1772,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Profiles",
@@ -2021,7 +2024,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Tags",
@@ -2073,7 +2077,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Ping",
@@ -2096,7 +2101,103 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Foundation",
+			"item": [
+				{
+					"name": "All Foundations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
+								"exec": [
+									"var is200Response = responseCode.code === 200;",
+									"",
+									"tests['Response code is 200 OK'] = is200Response;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest"
+							}
+						],
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Foundation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"foundation\":\n\t{\n\t\t\"name\": \"{{FOUNDATIONNAME}}\",\n\t\t\"description\": \"an amazing foundation\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIURL}}/foundations",
+							"host": [
+								"{{APIURL}}"
+							],
+							"path": [
+								"foundations"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Grants",
@@ -2236,7 +2337,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{APIURL}}/grants?author=johnjacob",
+							"raw": "{{APIURL}}/grants?founder=johnjacob",
 							"host": [
 								"{{APIURL}}"
 							],
@@ -2245,7 +2346,7 @@
 							],
 							"query": [
 								{
-									"key": "author",
+									"key": "founder",
 									"value": "johnjacob"
 								}
 							]
@@ -2392,7 +2493,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{APIURL}}/grants?tag=dragons",
+							"raw": "{{APIURL}}/grants?tag=test_tag_1",
 							"host": [
 								"{{APIURL}}"
 							],
@@ -2402,7 +2503,7 @@
 							"query": [
 								{
 									"key": "tag",
-									"value": "dragons"
+									"value": "test_tag_1"
 								}
 							]
 						}
@@ -2421,6 +2522,17 @@
 									"",
 									"tests['Response code is 200 OK'] = is200Response;",
 									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4eda2fff-673a-4e3f-874c-25d2426a55b0",
+								"exec": [
+									"postman.setNextRequest(\"Update Grant\");",
+									"// postman.setNextRequest(\"Delete Grant\");"
 								],
 								"type": "text/javascript"
 							}
@@ -2447,7 +2559,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"grant\":{\"title\":\"Test grant is the best\", \"description\":\"decription\", \"body\":\"nice body\", \"tagList\":[\"test_tag_1\",\"test_tag_2\"], \"amount\":10000, \"grantees\":20}}"
+							"raw": "{\n\n\"Foundation\":{\n\t\t\"Name\": \"{{FOUNDATIONNAME}}\"\n},\n\"Grant\": {\n\t \"title\":\"Test grant is the best\",\n\t \"description\":\"decription\",\n\t \"body\":\"nice body\",\n\t \"tagList\":[\"test_tag_1\",\"test_tag_2\"],\n\t \"amount\":10000\n\t}\n}"
 						},
 						"url": {
 							"raw": "{{APIURL}}/grants",
@@ -2461,53 +2573,8 @@
 					},
 					"response": []
 				}
-			]
-		},
-		{
-			"name": "Foundation",
-			"item": [
-				{
-					"name": "All Foundations",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "0f65a64e-d9bb-406d-bb16-6aec645d27fb",
-								"exec": [
-									"var is200Response = responseCode.code === 200;",
-									"",
-									"tests['Response code is 200 OK'] = is200Response;",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "X-Requested-With",
-								"value": "XMLHttpRequest"
-							}
-						],
-						"url": {
-							"raw": "{{APIURL}}/foundations",
-							"host": [
-								"{{APIURL}}"
-							],
-							"path": [
-								"foundations"
-							]
-						}
-					},
-					"response": []
-				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -2521,6 +2588,7 @@
 					"",
 					"pm.environment.set(\"USERNAME\", \"POSTMAN_TEST_USER_\" + randomInt)",
 					"pm.environment.set(\"EMAIL\", \"POSTMAN_TEST_EMAIL_\" + randomInt + \"@mail.com\")",
+					"pm.environment.set(\"FOUNDATIONNAME\", \"POSTMAN_TEST_FOUNDATION\")",
 					""
 				]
 			}
@@ -2538,34 +2606,40 @@
 	],
 	"variable": [
 		{
-			"id": "ac4f4c2d-10e2-4ada-88be-7e4b7a5e6f70",
+			"id": "99b1f622-6018-41b8-ac19-0c079a5013fc",
 			"key": "APIURL",
 			"value": "http://localhost:8000/api",
 			"type": "string"
 		},
 		{
-			"id": "16c27240-d1a8-4660-8da1-9c495144e383",
+			"id": "0ac46102-936d-4adb-b36b-21e11e1cf0f6",
 			"key": "USERNAME",
 			"value": "POSTMAN_TEST_USER",
 			"type": "string"
 		},
 		{
-			"id": "6b5ff7de-91f5-484e-b1db-74a1d9d2e624",
+			"id": "695ea738-2d34-4992-80d6-a7c61fec9de3",
 			"key": "PASSWORD",
 			"value": "password",
 			"type": "string"
 		},
 		{
-			"id": "3f5415b2-1cad-4483-9cdf-c7bc8d7a1007",
+			"id": "c68604c1-6f42-4952-b485-0ecb25d91396",
 			"key": "EMAIL",
 			"value": "POSTMAN_TEST_USER@mail.com",
 			"type": "string"
 		},
 		{
-			"id": "e32ee250-d906-4169-a218-653a579e3b58",
+			"id": "6040d206-d67e-4491-b0a2-393ba31ffa1d",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNTc2MDgzMzM4fQ.4VKb_GlLv2qqAuRJ9UlcH2Yg9S_ms09_sEbLpQmT44Q",
 			"type": "string"
+		},
+		{
+			"id": "74990a5a-46bf-41b6-90e9-ef11444fbc38",
+			"value": "",
+			"type": "string"
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

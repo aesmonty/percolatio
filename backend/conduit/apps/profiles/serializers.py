@@ -4,8 +4,9 @@ from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
-    bio = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()
+    bio = serializers.SerializerMethodField(method_name='get_bio')
+    image = serializers.SerializerMethodField(
+        method_name='get_image')
 
     class Meta:
         model = Profile

@@ -1,13 +1,14 @@
 from rest_framework import serializers
 
 from conduit.apps.profiles.serializers import ProfileSerializer
+from conduit.apps.foundations.serializers import FoundationSerializer
 
-from .models import Grant, Tag
-from .relations import TagRelatedField
+from ..models import Grant, Tag
+from ..relations import TagRelatedField
 
 
 class GrantSerializer(serializers.ModelSerializer):
-    author = ProfileSerializer(read_only=True)
+    foundation = FoundationSerializer(read_only=True)
     description = serializers.CharField(required=False)
     slug = serializers.SlugField(required=False)
     amount = serializers.IntegerField(required=False)
@@ -31,7 +32,7 @@ class GrantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grant
         fields = (
-            'author',
+            'foundation',
             'body',
             'amount',
             'grantees',
@@ -46,11 +47,9 @@ class GrantSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        author = self.context.get('author', None)
-
+        foundation = self.context.get('foundation', None)
         tags = validated_data.pop('tags', [])
-
-        grant = Grant.objects.create(author=author, **validated_data)
+        grant = Grant.objects.create(foundation=foundation, **validated_data)
 
         for tag in tags:
             grant.tags.add(tag)

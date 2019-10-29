@@ -5,7 +5,7 @@ from conduit.apps.core.models import TimestampedModel
 
 
 class Foundation(TimestampedModel):
-    name = models.CharField(db_index=True, max_length=255)
+    name = models.CharField(db_index=True, max_length=255, unique=True)
     description = models.TextField()
 
     # Every foundation must have at least one founder.

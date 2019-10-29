@@ -1,14 +1,20 @@
-from rest_framework import generics, mixins, status, viewsets
+from rest_framework import generics, mixins, status, viewsets, permissions
 from rest_framework.exceptions import NotFound, ParseError
-from rest_framework.permissions import (
-    AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
-)
+from rest_framework.permissions import (BasePermission)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Foundation, Tag
 from ..renderers import FoundationJSONRenderer
 from ..serializers import FoundationSerializer, TagSerializer
+
+
+class IsFoundationOwnerOrReadOnly(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.founder.user == request.user
 
 
 class FoundationViewSet(mixins.CreateModelMixin,
@@ -18,7 +24,7 @@ class FoundationViewSet(mixins.CreateModelMixin,
 
     lookup_field = 'name'
     queryset = Foundation.objects.select_related('founder', 'founder__user')
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsFoundationOwnerOrReadOnly,)
     renderer_classes = (FoundationJSONRenderer,)
     foundation_serializer = FoundationSerializer
 
@@ -36,17 +42,19 @@ class FoundationViewSet(mixins.CreateModelMixin,
         return queryset
 
     def create(self, request):
+
         context = {
             'founder': request.user.profile,
             'request': request
         }
 
-        foundation = request.data.get('foundation', {})
+        foundation = request.data.get('foundation', None)
+        if foundation is None:
+            raise ParseError("Cannot find foundation object in the request")
+
         foundation_serialized = self.foundation_serializer(
             data=foundation, context=context
         )
-
-        # TODO: Error when we create foundations with same name
 
         foundation_serialized.is_valid(raise_exception=True)
         foundation_serialized.save()
@@ -55,7 +63,6 @@ class FoundationViewSet(mixins.CreateModelMixin,
     def list(self, request):
         serializer_context = {'request': request}
         page = self.paginate_queryset(self.get_queryset())
-
         serializer = self.foundation_serializer(
             page,
             context=serializer_context,
@@ -87,6 +94,7 @@ class FoundationViewSet(mixins.CreateModelMixin,
         except Foundation.DoesNotExist:
             raise NotFound('A foundation with this name does not exist.')
 
+        self.check_object_permissions(self.request, original_foundation)
         new_foundation = request.data.get('foundation', {})
 
         serializer = self.foundation_serializer(

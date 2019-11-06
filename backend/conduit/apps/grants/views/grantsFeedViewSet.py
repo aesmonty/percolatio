@@ -55,6 +55,18 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
         return foundation, grant
 
+    @swagger_auto_schema(manual_parameters=[
+                         openapi.Parameter(
+                             'founder', openapi.IN_QUERY,  description='founder of the foundation that operates the grant',  type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'foundation', openapi.IN_QUERY,  description='foundation that operates the grant', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'favorited', openapi.IN_QUERY,  description='favorited by', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'applicant', openapi.IN_QUERY,  description='Applicants (this will be deprecated)', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'tag', openapi.IN_QUERY, description='Tags associated with the grant',  type=openapi.TYPE_STRING, example="OSS"),
+                         ])
     def list(self, request):
         """
         List grants with filters
@@ -66,6 +78,11 @@ class GrantsViewSet(mixins.CreateModelMixin,
         if founder is not None:
             queryset = queryset.filter(
                 foundation__founder__user__username=founder)
+
+        foundation = self.request.query_params.get('foundation', None)
+        if foundation is not None:
+            queryset = queryset.filter(
+                foundation__name=foundation)
 
         favorited_by = self.request.query_params.get('favorited', None)
         if favorited_by is not None:
@@ -98,7 +115,13 @@ class GrantsViewSet(mixins.CreateModelMixin,
                 'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
             })
         }
-    ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
+    ), responses={
+        201: openapi.Response(
+            description='Grant Created',
+            schema=GrantSerializer(),
+        ),
+        404: 'Foundation not found',
+        403: 'Not Authorized'})
     def create(self, request):
         """
         Create a grant from a foundation
@@ -168,6 +191,15 @@ class GrantsViewSet(mixins.CreateModelMixin,
         grant.delete()
         return Response(grant_serialized_data.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response(
+                description='Grant Created',
+                schema=GrantSerializer(),
+            ),
+            404: 'Grant not found',
+        }
+    )
     def retrieve(self, request, pk):
         """
         Retrieve a grant
@@ -196,7 +228,15 @@ class GrantsViewSet(mixins.CreateModelMixin,
                 'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
             })
         }
-    ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
+    ),
+        responses={
+        201: openapi.Response(
+            description='Grant Created',
+            schema=GrantSerializer(),
+        ),
+        403: 'Not Authorized',
+        404: 'Grant not found'
+    })
     def update(self, request, pk):
         """
         Update a grant

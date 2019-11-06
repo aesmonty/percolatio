@@ -1,0 +1,6 @@
+commands:
+  command1:
+    command: sudo yum install gcc python-setuptools python-devel postgresql-devel
+
+  command2:
+    command: sudo easy_install psycopg2

@@ -64,6 +64,7 @@ class GrantsViewSet(mixins.CreateModelMixin,
     renderer_classes = (GrantJSONRenderer,)
     grant_serializer = GrantSerializer
     foundation_serializer = FoundationSerializer
+    serializer_class = GrantSerializer
 
     def get_querysets(self, foundations_name, pk):
         try:
@@ -83,11 +84,11 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
     @swagger_auto_schema(manual_parameters=[
                          openapi.Parameter(
-                             'founder', openapi.IN_QUERY,  description='founder of the foundation that operates the grant',  type=openapi.TYPE_STRING, example="davinci"),
+                             'founder', openapi.IN_QUERY,  description='Founder of the foundation that operates the grant',  type=openapi.TYPE_STRING, example="davinci"),
                          openapi.Parameter(
-                             'foundation', openapi.IN_QUERY,  description='foundation that operates the grant', type=openapi.TYPE_STRING, example="davinci"),
+                             'foundation', openapi.IN_QUERY,  description='Foundation that operates the grant', type=openapi.TYPE_STRING, example="davinci"),
                          openapi.Parameter(
-                             'favorited', openapi.IN_QUERY,  description='favorited by', type=openapi.TYPE_STRING, example="davinci"),
+                             'favorited', openapi.IN_QUERY,  description='Favorited by', type=openapi.TYPE_STRING, example="davinci"),
                          openapi.Parameter(
                              'applicant', openapi.IN_QUERY,  description='Applicants (this will be deprecated)', type=openapi.TYPE_STRING, example="davinci"),
                          openapi.Parameter(
@@ -139,12 +140,8 @@ class GrantsViewSet(mixins.CreateModelMixin,
         properties={
             **FOUDNATION_DOCUMENTATION_SCHEMA,
             **GRANT_DOCUMENTATION_SCHEMA
-        }
-    ), responses={
-        201: openapi.Response(
-            description='Grant Created',
-            schema=GrantSerializer(),
-        ),
+        }),
+        responses={
         404: 'Foundation not found',
         403: 'Not Authorized'})
     def create(self, request):
@@ -215,10 +212,6 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
     @swagger_auto_schema(
         responses={
-            201: openapi.Response(
-                description='Grant Created',
-                schema=GrantSerializer(),
-            ),
             404: 'Grant not found',
         }
     )
@@ -245,43 +238,32 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        properties={
-            'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT, description='Foundation', properties={
-                'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
-            })
-        }
-    ),
+        properties=FOUDNATION_DOCUMENTATION_SCHEMA,
         responses={
-        201: openapi.Response(
-            description='Grant Created',
-            schema=GrantSerializer(),
-        ),
-        403: 'Not Authorized',
-        404: 'Grant not found'
-    })
-        properties = FOUDNATION_DOCUMENTATION_SCHEMA,
-    ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
+            403: 'Not Authorized',
+            404: 'Grant not found'
+        }))
     def update(self, request, pk):
         """
         Update a grant
         """
-        foundation=request.data.get('Foundation', None)
+        foundation = request.data.get('Foundation', None)
 
         if foundation is None or foundation["Name"] is None:
             raise ParseError("Could not parse foundation name")
 
-        foundations_name=foundation["Name"]
-        foundation, grant=self.get_querysets(foundations_name, pk)
+        foundations_name = foundation["Name"]
+        foundation, grant = self.get_querysets(foundations_name, pk)
         self.check_object_permissions(self.request, foundation)
 
-        serializer_context={
+        serializer_context = {
             'foundation': foundation,
             'request': request
         }
 
-        new_grant=request.data.get('Grant', {})
+        new_grant = request.data.get('Grant', {})
         # TODO: We should be stricter here. We may want to have fields that are read only and that we should not be able to update
-        serializer=self.grant_serializer(
+        serializer = self.grant_serializer(
             grant,
             context=serializer_context,
             data=new_grant,

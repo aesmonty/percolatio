@@ -19,15 +19,15 @@ class GrantsFavoriteAPIView(APIView):
     renderer_classes = (GrantJSONRenderer,)
     serializer_class = GrantSerializer
 
-    @swagger_auto_schema(
-        responses={
-            201: openapi.Response(
-                description='Grant Created',
-                schema=GrantSerializer(),
-            ),
-            404: 'Grant not found',
-        }
-    )
+    # @swagger_auto_schema(
+    #     responses={
+    #         201: openapi.Response(
+    #             description='Grant Created',
+    #             schema=GrantSerializer(),
+    #         ),
+    #         404: 'Grant not found',
+    #     }
+    # )
     def delete(self, request, grantSlug):
         """
         Unfavorite a grant.
@@ -44,15 +44,15 @@ class GrantsFavoriteAPIView(APIView):
         serializer = self.serializer_class(grant, context=serializer_context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(
-        responses={
-            201: openapi.Response(
-                description='Grant Created',
-                schema=GrantSerializer(),
-            ),
-            404: 'Grant not found',
-        }
-    )
+    # @swagger_auto_schema(
+    #     responses={
+    #         201: openapi.Response(
+    #             description='Grant Created',
+    #             schema=GrantSerializer(),
+    #         ),
+    #         404: 'Grant not found',
+    #     }
+    # )
     def post(self, request, grantSlug):
         """
         Favorite a grant.

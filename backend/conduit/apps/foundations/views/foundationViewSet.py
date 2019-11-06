@@ -8,6 +8,20 @@ from ..models import Foundation, Tag
 from ..renderers import FoundationJSONRenderer
 from ..serializers import FoundationSerializer, TagSerializer
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+
+FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT, description='Foundation',
+                                                                properties={
+                                                                    'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
+                                                                }),
+                                   'Description': openapi.Schema(type=openapi.TYPE_OBJECT, description='A description for the foundation',
+                                                                 properties={
+                                                                     'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
+                                                                 }),
+                                   }
+
 
 class IsFoundationOwnerOrReadOnly(BasePermission):
 
@@ -27,6 +41,7 @@ class FoundationViewSet(mixins.CreateModelMixin,
     permission_classes = (IsFoundationOwnerOrReadOnly,)
     renderer_classes = (FoundationJSONRenderer,)
     foundation_serializer = FoundationSerializer
+    serializer_class = FoundationSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -41,6 +56,12 @@ class FoundationViewSet(mixins.CreateModelMixin,
 
         return queryset
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties=FOUDNATION_DOCUMENTATION_SCHEMA),
+        responses={
+        404: 'Incorrect body',
+        403: 'Not Authorized'})
     def create(self, request):
 
         context = {
@@ -60,6 +81,10 @@ class FoundationViewSet(mixins.CreateModelMixin,
         foundation_serialized.save()
         return Response(foundation_serialized.data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(manual_parameters=[
+                         openapi.Parameter(
+                             'founder', openapi.IN_QUERY,  description='Select foundations based on the founder',  type=openapi.TYPE_STRING, example="davinci"),
+                         ])
     def list(self, request):
         serializer_context = {'request': request}
         page = self.paginate_queryset(self.get_queryset())

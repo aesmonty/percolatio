@@ -36,11 +36,3 @@ class Grant(TimestampedModel):
 
     def __str__(self):
         return self.title
-
-
-class Tag(TimestampedModel):
-    tag = models.CharField(max_length=255)
-    slug = models.SlugField(db_index=True, unique=True)
-
-    def __str__(self):
-        return self.tag

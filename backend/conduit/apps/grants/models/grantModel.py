@@ -8,14 +8,14 @@ class Grant(TimestampedModel):
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     title = models.CharField(max_length=255)
 
-    isPreFunded = models.BooleanField()
+    isPreFunded = models.BooleanField(default=False)
     numberOfGrantees = models.IntegerField(
         default=1)
     amountPerGrantee = models.IntegerField()
     nonFinancialRewards = models.BooleanField(default=False)
 
-    applicationsStartDate = models.DateTimeField()
-    applicationsEndDate = models.DateTimeField()
+    applicationsStartDate = models.DateField()
+    applicationsEndDate = models.DateField()
 
     description = models.TextField()
     externalWebsite = models.TextField(default='')

@@ -8,10 +8,6 @@ from ..models import Grant, GrantApplication
 from ..serializers import GrantSerializer, GrantApplicationSerializer
 
 
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
-
 class IsAuthorizedOrIsMethodSafe(BasePermission):
 
     def has_permission(self, request, view):
@@ -54,15 +50,6 @@ class ApplicantsListAPIView(generics.ListCreateAPIView):
 
         return self.get_paginated_response(serializer.data)
 
-    @swagger_auto_schema(
-        responses={
-            201: openapi.Response(
-                description='Application Created',
-                schema=GrantApplicationSerializer(),
-            ),
-            404: 'Grant not found',
-        }
-    )
     def create(self, request, grantSlug):
         """
         Apply to a grant

@@ -10,24 +10,12 @@ from conduit.apps.grants.renderers import GrantJSONRenderer
 from conduit.apps.grants.models import Grant
 from conduit.apps.grants.serializers import GrantSerializer
 
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
 
 class GrantsFavoriteAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (GrantJSONRenderer,)
     serializer_class = GrantSerializer
 
-    # @swagger_auto_schema(
-    #     responses={
-    #         201: openapi.Response(
-    #             description='Grant Created',
-    #             schema=GrantSerializer(),
-    #         ),
-    #         404: 'Grant not found',
-    #     }
-    # )
     def delete(self, request, grantSlug):
         """
         Unfavorite a grant.
@@ -44,15 +32,6 @@ class GrantsFavoriteAPIView(APIView):
         serializer = self.serializer_class(grant, context=serializer_context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # @swagger_auto_schema(
-    #     responses={
-    #         201: openapi.Response(
-    #             description='Grant Created',
-    #             schema=GrantSerializer(),
-    #         ),
-    #         404: 'Grant not found',
-    #     }
-    # )
     def post(self, request, grantSlug):
         """
         Favorite a grant.

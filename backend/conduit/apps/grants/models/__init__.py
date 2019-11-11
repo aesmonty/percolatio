@@ -1,3 +1,2 @@
-from .grantModel import Grant
-from .tagmodel import Tag
+from .grantModel import Grant, Tag
 from .applicationModel import GrantApplication

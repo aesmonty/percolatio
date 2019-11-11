@@ -9,11 +9,10 @@ from rest_framework.test import APITestCase, APIClient
 from conduit.apps.foundations.models import Foundation
 from conduit.apps.profiles.models import Profile
 
-from .commonObjects import getTestGrant
-
 
 class GrantsViewSetTestCase(APITestCase):
     url = reverse("grants:grants-list")
+    # listUrl = reverse("foundations:foundationFeed")
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
@@ -27,7 +26,17 @@ class GrantsViewSetTestCase(APITestCase):
             name=self.foundation_name,
             description='foo')
 
-        self.grant = getTestGrant(self.foundation_name)
+        self.grant = {
+            "Foundation": {
+                "Name": self.foundation_name
+            },
+            "Grant": {
+                "title": "Test grant is the best",
+                "description": "decription",
+                "body": "nice body",
+                "amount": "10000"
+            }
+        }
 
     def create_grant(self):
         response = self.client.post(
@@ -60,13 +69,16 @@ class GrantsViewSetTestCase(APITestCase):
         new_title = json.loads(response.content)["grant"]["title"]
         self.assertEqual(expected_title, new_title)
 
-    def test_list_grant(self):
-        numberOfGrants = 10
-        for _ in range(0, numberOfGrants):
-            self.create_grant()
-
-        response = self.client.get(
-            self.url)
-        self.assertEqual(200, response.status_code)
-        grantCount = json.loads(response.content)["grantsCount"]
-        self.assertEqual(numberOfGrants, grantCount)
+    # def test_delete_grant(self):
+    #     response = self.create_grant()
+    #     slug = json.loads(response.content)["grant"]["slug"]
+    #     response = self.client.delete(
+    #         self.url + '{}'.format(slug),
+    #         json.dumps(
+    #             {
+    #                 "Foundation": {
+    #                     "Name": self.foundation_name
+    #                 }
+    #             }),
+    #         content_type='application/json')
+    #     self.assertEqual(204, response.status_code)

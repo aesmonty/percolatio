@@ -9,6 +9,8 @@ from rest_framework.test import APITestCase, APIClient
 from conduit.apps.foundations.models import Foundation
 from conduit.apps.profiles.models import Profile
 
+from .commonObjects import getTestGrant
+
 
 class GrantsFavoriteAPIViewTestCase(APITestCase):
     createUrl = reverse("grants:grants-list")
@@ -25,17 +27,7 @@ class GrantsFavoriteAPIViewTestCase(APITestCase):
             name=self.foundation_name,
             description='foo')
 
-        self.grant = {
-            "Foundation": {
-                "Name": self.foundation_name
-            },
-            "Grant": {
-                "title": "Test grant is the best",
-                "description": "decription",
-                "body": "nice body",
-                "amount": "10000"
-            }
-        }
+        self.grant = getTestGrant(self.foundation_name)
 
         self.application = {
             "application": {

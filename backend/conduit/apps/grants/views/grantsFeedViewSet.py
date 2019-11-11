@@ -64,6 +64,7 @@ class GrantsViewSet(mixins.CreateModelMixin,
     renderer_classes = (GrantJSONRenderer,)
     grant_serializer = GrantSerializer
     foundation_serializer = FoundationSerializer
+    serializer_class = GrantSerializer
 
     def get_querysets(self, foundations_name, pk):
         try:
@@ -81,6 +82,18 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
         return foundation, grant
 
+    @swagger_auto_schema(manual_parameters=[
+                         openapi.Parameter(
+                             'founder', openapi.IN_QUERY,  description='Founder of the foundation that operates the grant',  type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'foundation', openapi.IN_QUERY,  description='Foundation that operates the grant', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'favorited', openapi.IN_QUERY,  description='Favorited by', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'applicant', openapi.IN_QUERY,  description='Applicants (this will be deprecated)', type=openapi.TYPE_STRING, example="davinci"),
+                         openapi.Parameter(
+                             'tag', openapi.IN_QUERY, description='Tags associated with the grant',  type=openapi.TYPE_STRING, example="OSS"),
+                         ])
     def list(self, request):
         """
         List grants with filters
@@ -92,6 +105,11 @@ class GrantsViewSet(mixins.CreateModelMixin,
         if founder is not None:
             queryset = queryset.filter(
                 foundation__founder__user__username=founder)
+
+        foundation = self.request.query_params.get('foundation', None)
+        if foundation is not None:
+            queryset = queryset.filter(
+                foundation__name=foundation)
 
         favorited_by = self.request.query_params.get('favorited', None)
         if favorited_by is not None:
@@ -122,8 +140,10 @@ class GrantsViewSet(mixins.CreateModelMixin,
         properties={
             **FOUDNATION_DOCUMENTATION_SCHEMA,
             **GRANT_DOCUMENTATION_SCHEMA
-        }
-    ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
+        }),
+        responses={
+        404: 'Foundation not found',
+        403: 'Not Authorized'})
     def create(self, request):
         """
         Create a grant from a foundation
@@ -190,6 +210,11 @@ class GrantsViewSet(mixins.CreateModelMixin,
         grant.delete()
         return Response(grant_serialized_data.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        responses={
+            404: 'Grant not found',
+        }
+    )
     def retrieve(self, request, pk):
         """
         Retrieve a grant
@@ -214,7 +239,14 @@ class GrantsViewSet(mixins.CreateModelMixin,
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties=FOUDNATION_DOCUMENTATION_SCHEMA,
+<<<<<<< HEAD
     ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
+=======
+        responses={
+            403: 'Not Authorized',
+            404: 'Grant not found'
+        }))
+>>>>>>> master
     def update(self, request, pk):
         """
         Update a grant

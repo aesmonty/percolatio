@@ -7,6 +7,8 @@ from conduit.apps.foundations.serializers import FoundationSerializer
 from ..models import Grant, Tag
 from ..relations import TagRelatedField
 
+import datetime
+
 
 class GrantSerializer(serializers.ModelSerializer):
 
@@ -16,19 +18,21 @@ class GrantSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     tagList = TagRelatedField(many=True, required=False, source='tags')
 
-    isPreFunded = serializers.BooleanField(required=True)
+    isPreFunded = serializers.BooleanField(required=False)
     numberOfGrantees = serializers.IntegerField(
         required=False, validators=[MinValueValidator(1)])
 
     amountPerGrantee = serializers.IntegerField(
-        required=True, validators=[MinValueValidator(0)])
+        required=False, default=-1)
 
     nonFinancialRewards = serializers.BooleanField(
         required=False,  default=False)
 
-    # TODO: Add validators
-    applicationsStartDate = serializers.DateTimeField(required=True)
-    applicationsEndDate = serializers.DateTimeField(required=True)
+    # TODO: Add validators and make this required again.
+    applicationsStartDate = serializers.DateField(
+        required=False, default=datetime.date.today())
+    applicationsEndDate = serializers.DateField(
+        required=False, default=datetime.date.today() + datetime.timedelta(days=30))
     description = serializers.CharField(required=False)
 
     externalWebsite = serializers.CharField(

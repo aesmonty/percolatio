@@ -11,11 +11,12 @@ from .renderers import ArticleJSONRenderer, CommentJSONRenderer
 from .serializers import ArticleSerializer, CommentSerializer, TagSerializer
 
 
-class ArticleViewSet(mixins.CreateModelMixin, 
+class ArticleViewSet(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
 
+    swagger_schema = None
     lookup_field = 'slug'
     queryset = Article.objects.select_related('author', 'author__user')
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -49,7 +50,7 @@ class ArticleViewSet(mixins.CreateModelMixin,
         serializer_data = request.data.get('article', {})
 
         serializer = self.serializer_class(
-        data=serializer_data, context=serializer_context
+            data=serializer_data, context=serializer_context
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -83,7 +84,6 @@ class ArticleViewSet(mixins.CreateModelMixin,
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def update(self, request, slug):
         serializer_context = {'request': request}
 
@@ -91,13 +91,13 @@ class ArticleViewSet(mixins.CreateModelMixin,
             serializer_instance = self.queryset.get(slug=slug)
         except Article.DoesNotExist:
             raise NotFound('An article with this slug does not exist.')
-            
+
         serializer_data = request.data.get('article', {})
 
         serializer = self.serializer_class(
-            serializer_instance, 
+            serializer_instance,
             context=serializer_context,
-            data=serializer_data, 
+            data=serializer_data,
             partial=True
         )
         serializer.is_valid(raise_exception=True)
@@ -107,6 +107,7 @@ class ArticleViewSet(mixins.CreateModelMixin,
 
 
 class CommentsListCreateAPIView(generics.ListCreateAPIView):
+    swagger_schema = None
     lookup_field = 'article__slug'
     lookup_url_kwarg = 'article_slug'
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -142,6 +143,7 @@ class CommentsListCreateAPIView(generics.ListCreateAPIView):
 
 
 class CommentsDestroyAPIView(generics.DestroyAPIView):
+    swagger_schema = None
     lookup_url_kwarg = 'comment_pk'
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Comment.objects.all()
@@ -158,6 +160,7 @@ class CommentsDestroyAPIView(generics.DestroyAPIView):
 
 
 class ArticlesFavoriteAPIView(APIView):
+    swagger_schema = None
     permission_classes = (IsAuthenticated,)
     renderer_classes = (ArticleJSONRenderer,)
     serializer_class = ArticleSerializer
@@ -194,6 +197,7 @@ class ArticlesFavoriteAPIView(APIView):
 
 
 class TagListAPIView(generics.ListAPIView):
+    swagger_schema = None
     queryset = Tag.objects.all()
     pagination_class = None
     permission_classes = (AllowAny,)
@@ -209,6 +213,7 @@ class TagListAPIView(generics.ListAPIView):
 
 
 class ArticlesFeedAPIView(generics.ListAPIView):
+    swagger_schema = None
     permission_classes = (IsAuthenticated,)
     queryset = Article.objects.all()
     renderer_classes = (ArticleJSONRenderer,)

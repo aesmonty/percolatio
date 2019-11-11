@@ -1,7 +1,11 @@
 ## Initial Setup
 1. Setting up the python environment 
    
-   `virtualenv .env --python=python3.7&& source .env/bin/activate && pip install -r requirements.txt`
+   ``` bash
+   virtualenv .env --python=python3.7
+   source .env/bin/activate
+   pip install -r requirements.txt
+   ```
 
 1. Applying migration 
    

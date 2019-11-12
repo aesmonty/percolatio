@@ -1,12 +1,26 @@
 from django.db import models
 from conduit.apps.core.models import TimestampedModel
+from django.utils.timezone import now
+
 
 DEFAULT_NUMBER_OF_APPLICANTS = 1
+
+
+def upload_image_to(instance, filename):
+    return 'grant/%s/%s' % (
+        now().strftime("%Y%m%d"),
+        instance.slug
+    )
 
 
 class Grant(TimestampedModel):
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     title = models.CharField(max_length=255)
+
+    img = models.FileField(
+        upload_to=upload_image_to,
+        blank=True,
+        editable=True)
 
     isPreFunded = models.BooleanField(default=False)
     numberOfGrantees = models.IntegerField(

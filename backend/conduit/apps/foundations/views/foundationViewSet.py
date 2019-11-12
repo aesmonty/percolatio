@@ -4,6 +4,7 @@ from rest_framework.permissions import (BasePermission)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .foundationPermissions import IsFoundationOwnerOrReadOnly
 from ..models import Foundation, Tag
 from ..renderers import FoundationJSONRenderer
 from ..serializers import FoundationSerializer, TagSerializer
@@ -21,14 +22,6 @@ FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYP
                                                                      'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
                                                                  }),
                                    }
-
-
-class IsFoundationOwnerOrReadOnly(BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.founder.user == request.user
 
 
 class FoundationViewSet(mixins.CreateModelMixin,

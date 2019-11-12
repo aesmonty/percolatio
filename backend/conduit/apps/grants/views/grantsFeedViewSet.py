@@ -239,14 +239,10 @@ class GrantsViewSet(mixins.CreateModelMixin,
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties=FOUDNATION_DOCUMENTATION_SCHEMA,
-<<<<<<< HEAD
-    ), responses={404: 'Foundation not found', 403: 'Not Authorized'})
-=======
         responses={
             403: 'Not Authorized',
             404: 'Grant not found'
         }))
->>>>>>> master
     def update(self, request, pk):
         """
         Update a grant

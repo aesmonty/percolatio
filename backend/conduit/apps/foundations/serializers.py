@@ -23,6 +23,8 @@ class FoundationSerializer(serializers.ModelSerializer):
         method_name='get_followers_count'
     )
 
+    img = serializers.SerializerMethodField(method_name='get_image_link')
+
     founder = ProfileSerializer(read_only=True)
 
     # TODO: Serialize grantees field in Foundation? Maybe need to create smth like TagRelatedField
@@ -37,8 +39,9 @@ class FoundationSerializer(serializers.ModelSerializer):
             'grantees',
             'followed',
             'followersCount',
+            'img',
             'tagList',
-            'updatedAt',
+            'updatedAt'
         )
 
     def create(self, validated_data):
@@ -71,6 +74,11 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()
+
+    def get_image_link(self, instance):
+        if instance.img and hasattr(instance.img, 'url'):
+            return instance.img.base_url
+        return ''
 
 
 class TagSerializer(serializers.ModelSerializer):

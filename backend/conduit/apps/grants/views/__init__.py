@@ -1,5 +1,6 @@
 from .grantsFeedAPIView import GrantsFeedView
 from .grantsFeedViewSet import GrantsViewSet
 from .grantsFavoriteAPIView import GrantsFavoriteAPIView
+from .grantImageUploadAPIView import GrantImageUploadView
 from .applicantsListAPIView import ApplicantsListAPIView
 from .applicationDestroyAPIView import ApplicationDestroyAPIView

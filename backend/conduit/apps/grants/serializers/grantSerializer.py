@@ -45,6 +45,8 @@ class GrantSerializer(serializers.ModelSerializer):
         method_name='get_favorites_count'
     )
 
+    img = serializers.SerializerMethodField(method_name='get_image_link')
+
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
 
@@ -67,6 +69,7 @@ class GrantSerializer(serializers.ModelSerializer):
             'favorited',
             'favoritesCount',
             'tagList',
+            'img',
             'createdAt',
             'updatedAt',
         )
@@ -99,6 +102,11 @@ class GrantSerializer(serializers.ModelSerializer):
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()
+
+    def get_image_link(self, instance):
+        if instance.img and hasattr(instance.img, 'url'):
+            return instance.img.base_url
+        return ''
 
 
 class TagSerializer(serializers.ModelSerializer):

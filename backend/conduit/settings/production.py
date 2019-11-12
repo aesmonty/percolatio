@@ -16,7 +16,7 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'conduit.eu-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'percolatio.eu-west-1.elasticbeanstalk.com']
 
 DATABASES = {
     'default': {
@@ -29,9 +29,8 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = (
-    'conduit.eu-west-2.elasticbeanstalk.com',
-)
+CORS_ORIGIN_WHITELIST = ('percolatio.eu-west-1.elasticbeanstalk.com',
+                         )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

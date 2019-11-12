@@ -14,7 +14,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', 'percolatio.eu-west-1.elasticbeanstalk.com']
 

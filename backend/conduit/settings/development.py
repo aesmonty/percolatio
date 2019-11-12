@@ -24,3 +24,5 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:4100',
     'localhost:8000'
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")

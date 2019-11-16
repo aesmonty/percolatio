@@ -4,6 +4,8 @@ from conduit.settings.common import *
 import boto3
 ssm = boto3.client('ssm', region_name='eu-west-2')
 
+AWS_S3_REGION_NAME = 'eu-west-2'
+
 
 def _get_ssm_key(name):
     key = ssm.get_parameter(Name=name, WithDecryption=True)
@@ -28,6 +30,7 @@ DATABASES = {
 }
 
 CORS_ORIGIN_WHITELIST = ('percolatio.eu-west-1.elasticbeanstalk.com',
+                         'https://s3.eu-west-2.amazonaws.com/percolation.images/',
                          )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

@@ -10,8 +10,6 @@ def _get_ssm_key(name):
     return key['Parameter']['Value']
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
@@ -33,8 +31,10 @@ CORS_ORIGIN_WHITELIST = ('percolatio.eu-west-1.elasticbeanstalk.com',
                          )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_STORAGE_BUCKET_NAME = "percolatio.images"
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
+AWS_STORAGE_BUCKET_NAME = "percolation.images"
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False

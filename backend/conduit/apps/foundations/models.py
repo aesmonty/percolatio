@@ -6,7 +6,6 @@ from conduit.apps.core.models import TimestampedModel
 
 
 def upload_image_to(instance, filename):
-
     return 'foundation/%s/%s' % (
         now().strftime("%Y%m%d"),
         instance.id
@@ -16,6 +15,7 @@ def upload_image_to(instance, filename):
 class Foundation(TimestampedModel):
     name = models.CharField(db_index=True, max_length=255, unique=True)
     description = models.TextField()
+    website = models.URLField()
 
     img = models.FileField(
         upload_to=upload_image_to,

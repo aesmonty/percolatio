@@ -9,8 +9,9 @@ from .relations import TagRelatedField
 class FoundationSerializer(serializers.ModelSerializer):
     name = serializers.CharField()  # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
+    website = serializers.URLField(required=False)
 
-    # TODO: Update to List of Profiles!!!
+    # TODO: See issue #22
     grantees = serializers.CharField(required=False)
 
     tagList = TagRelatedField(many=True, required=False, source='tags')
@@ -27,13 +28,12 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     founder = ProfileSerializer(read_only=True)
 
-    # TODO: Serialize grantees field in Foundation? Maybe need to create smth like TagRelatedField
-
     class Meta:
         model = Foundation
         fields = (
             'name',
             'description',
+            'website',
             'createdAt',
             'founder',
             'grantees',

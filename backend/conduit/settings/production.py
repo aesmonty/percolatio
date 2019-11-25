@@ -29,7 +29,7 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = ('percolatio.eu-west-1.elasticbeanstalk.com',
+CORS_ORIGIN_WHITELIST = ('percdev.eu-west-1.elasticbeanstalk.com',
                          'https://s3.eu-west-2.amazonaws.com/percolation.images/',
                          )
 

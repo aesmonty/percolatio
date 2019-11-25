@@ -16,7 +16,7 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'percolatio.eu-west-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'percdev.eu-west-1.elasticbeanstalk.com']
 
 DATABASES = {
     'default': {

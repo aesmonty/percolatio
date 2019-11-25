@@ -1,3 +1,4 @@
+import requests
 import os
 from conduit.settings.common import *
 
@@ -16,7 +17,18 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'http://percdev.eu-west-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = []
+
+EC2_PRIVATE_IP = None
+try:
+    EC2_PRIVATE_IP = requests.get(
+        'http://169.254.169.254/latest/meta-data/local-ipv4',
+        timeout=0.01).text
+except requests.exceptions.RequestException:
+    pass
+
+if EC2_PRIVATE_IP:
+    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
 
 DATABASES = {
     'default': {

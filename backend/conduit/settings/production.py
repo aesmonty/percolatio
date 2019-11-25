@@ -16,7 +16,7 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'percdev.eu-west-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'http://percdev.eu-west-1.elasticbeanstalk.com']
 
 DATABASES = {
     'default': {
@@ -29,7 +29,7 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = ('percdev.eu-west-1.elasticbeanstalk.com',
+CORS_ORIGIN_WHITELIST = ('http://percdev.eu-west-1.elasticbeanstalk.com',
                          'https://s3.eu-west-2.amazonaws.com/percolation.images/',
                          )
 

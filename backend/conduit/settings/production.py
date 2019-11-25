@@ -17,18 +17,12 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-EC2_PRIVATE_IP = None
-try:
-    EC2_PRIVATE_IP = requests.get(
-        'http://169.254.169.254/latest/meta-data/local-ipv4',
-        timeout=0.01).text
-except requests.exceptions.RequestException:
-    pass
-
-if EC2_PRIVATE_IP:
-    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
+ALLOWED_HOSTS = ['pecolatio.com']
+ELB_HEALTHCHECK_HOSTNAMES = [ip for network in
+                             requests.get(os.environ['ECS_CONTAINER_METADATA_URI']).json()[
+                                 'Networks']
+                             for ip in network['IPv4Addresses']]
+ALLOWED_HOSTS += ELB_HEALTHCHECK_HOSTNAMES
 
 DATABASES = {
     'default': {
@@ -43,6 +37,7 @@ DATABASES = {
 
 CORS_ORIGIN_WHITELIST = ('http://percdev.eu-west-1.elasticbeanstalk.com',
                          'https://s3.eu-west-2.amazonaws.com/percolation.images/',
+                         'pecolatio.com'
                          )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

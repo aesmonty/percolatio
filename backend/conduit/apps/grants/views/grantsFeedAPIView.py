@@ -15,7 +15,7 @@ class GrantsFeedView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Grant.objects.all()
     renderer_classes = (GrantJSONRenderer,)
-    grant_serializer = GrantSerializer
+    serializer_class = GrantSerializer
 
     def list(self, request):
         """
@@ -24,8 +24,10 @@ class GrantsFeedView(generics.ListAPIView):
         page = self.paginate_queryset(self.queryset)
 
         serializer_context = {'request': request}
-        serializer = self.grant_serializer(
-            page, context=serializer_context, many=True
+        serializer = self.serializer_class(
+            page,
+            context=serializer_context,
+            many=True
         )
 
         return self.get_paginated_response(serializer.data)

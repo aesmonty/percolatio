@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase, APIClient
 from conduit.apps.foundations.models import Foundation
 from conduit.apps.profiles.models import Profile
 
-from .commonObjects import getTestGrant
+from .commonObjects import getGrantBasic, fake
 
 
 class GrantsFavoriteAPIViewTestCase(APITestCase):
@@ -17,23 +17,19 @@ class GrantsFavoriteAPIViewTestCase(APITestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            'davinci', 'davinci@mail.com', 'password')
-        self.foundation_name = 'davinciFoundation'
+            fake.user_name(),
+            fake.email(),
+            fake.text(max_nb_chars=14))
         self.client = APIClient()
         self.client.force_authenticate(self.user)
-        self.profile = Profile.objects.get(user=self.user)
+
+        self.foundation_name = fake.company()
         self.foundation = Foundation.objects.create(
-            founder=self.profile,
+            founder=self.user.profile,
             name=self.foundation_name,
-            description='foo')
+            description=fake.paragraph())
 
-        self.grant = getTestGrant(self.foundation_name)
-
-        self.application = {
-            "application": {
-                "body": "this is why I am applying to this grant"
-            }
-        }
+        self.grant = getGrantBasic(self.foundation_name)
 
     def create_grant(self):
         response = self.client.post(
@@ -45,9 +41,8 @@ class GrantsFavoriteAPIViewTestCase(APITestCase):
 
     def favorite_application(self, slug):
         response = self.client.post(
-            reverse("grants:grantFavorite", kwargs={'grantSlug': slug}),
-            json.dumps(self.application),
-            content_type='application/json')
+            reverse("grants:grantFavorite",
+                    kwargs={'grantSlug': slug}))
         self.assertEqual(201, response.status_code)
         return response
 

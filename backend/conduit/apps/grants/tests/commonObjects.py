@@ -11,33 +11,25 @@ def getGrantBasic(foundation_name):
         "Grant": {
             "title": fake.company(),
             "description": fake.paragraph(),
-            "minAmountPerGrantee": fake.random.pyint(min_value=0, max_value=9999)
+            "minAmountPerGrantee": fake.random_int(0, 9999)
         }
     }
 
 
-def getGrantComplete():
-    pass
-
-
-def getTestGrant(foundation_name):
-
+def getGrantComplete(foundation_name):
     return {
         "Foundation": {
             "Name": foundation_name
         },
-
         "Grant": {
-            "title": "Test grant is the best",
-            "description": "Lorem ipsum",
-            "state": "Receiving applications",
-            "minAmountPerGrantee": "10000",
-
-            # Optional Parameters
-            "tagList": ["test_tag_1", "test_tag_2"],
-            "externalWebsite": "https://stackoverflow.com/",
-            "otherDetails": 'Another detail',
-            "allowDonations": True,  # Default True
-            "otherAwards": "Stripe credits",  # Default empty
+            "title": fake.company(),
+            "description": fake.paragraph(),
+            "minAmountPerGrantee": fake.random_int(0, 9999),
+            "state": fake.random_int(1, 5),
+            "tagList": fake.words(nb=3, ext_word_list=None, unique=True),
+            'externalWebsite': fake.uri(),
+            'allowDonations': bool(fake.random_int(0, 1)),
+            'otherAwards': fake.paragraph(),
+            'otherDetails': fake.paragraph(),
         }
     }

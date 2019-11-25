@@ -26,7 +26,8 @@ class GrantSerializer(serializers.ModelSerializer):
     # Optional values
     state = serializers.IntegerField(
         required=False,
-        default=GrantState.RAISING)  # TODO: Validators
+        default=GrantState.RAISING,
+        validators=[MinValueValidator(1), MaxValueValidator(5)])  # TODO: Validators
     tagList = TagRelatedField(many=True, required=False, source='tags')
     externalWebsite = serializers.URLField(required=False, default=None)
     allowDonations = serializers.BooleanField(required=False, default=True)
@@ -59,7 +60,7 @@ class GrantSerializer(serializers.ModelSerializer):
             'otherAwards',
             'otherDetails',
             'favorited',
-            'favoritesCount'
+            'favoritesCount',
             'img',
             'createdAt',
             'updatedAt',

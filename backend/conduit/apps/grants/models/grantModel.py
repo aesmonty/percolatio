@@ -26,16 +26,19 @@ class Grant(TimestampedModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     minAmountPerGrantee = models.IntegerField()
-    state = models.IntegerField(choices=[state.value for state in GrantState])
+
+    state = models.IntegerField(
+        choices=tuple([(state.value, str(state.name)) for state in GrantState])
+    )
 
     # Optional model fields
     tags = models.ManyToManyField(
         'grants.Tag', related_name='grants'
     )
-    externalWebsite = models.URLField()
+    externalWebsite = models.URLField(blank=True, null=True)
     allowDonations = models.BooleanField(default=True)
-    otherAwards = models.CharField()
-    otherDetails = models.CharField()
+    otherAwards = models.TextField(blank=True, null=True)
+    otherDetails = models.TextField(blank=True, null=True)
 
     # Other metadata
     img = models.FileField(

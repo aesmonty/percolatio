@@ -14,7 +14,7 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
     permission_classes = (AllowAny,)
     queryset = Profile.objects.select_related('user')
     renderer_classes = (ProfileJSONRenderer,)
-    profile_serializer = ProfileSerializer
+    serializer_class = ProfileSerializer
 
     def retrieve(self, request, username, *args, **kwargs):
 
@@ -26,7 +26,7 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
         except Profile.DoesNotExist:
             raise NotFound('A profile with this username does not exist.')
 
-        serializer = self.profile_serializer(profile, context={
+        serializer = self.serializer_class(profile, context={
             'request': request
         })
 

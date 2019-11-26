@@ -21,11 +21,11 @@ ALLOWED_HOSTS = [
     'percdev.eu-west-1.elasticbeanstalk.com',
     'pecolatio.com']
 
-ELB_HEALTHCHECK_HOSTNAMES = [ip for network in
-                             requests.get(os.environ['ECS_CONTAINER_METADATA_URI']).json()[
-                                 'Networks']
-                             for ip in network['IPv4Addresses']]
-ALLOWED_HOSTS += ELB_HEALTHCHECK_HOSTNAMES
+# ELB_HEALTHCHECK_HOSTNAMES = [ip for network in
+#                              requests.get(os.environ['ECS_CONTAINER_METADATA_URI']).json()[
+#                                  'Networks']
+#                              for ip in network['IPv4Addresses']]
+# ALLOWED_HOSTS += ELB_HEALTHCHECK_HOSTNAMES
 
 DATABASES = {
     'default': {

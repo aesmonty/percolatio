@@ -17,7 +17,7 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = False
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ['*']
 
 
 DATABASES = {

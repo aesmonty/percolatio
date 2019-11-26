@@ -17,7 +17,10 @@ SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['pecolatio.com']
+ALLOWED_HOSTS = [
+    'percdev.eu-west-1.elasticbeanstalk.com',
+    'pecolatio.com']
+
 ELB_HEALTHCHECK_HOSTNAMES = [ip for network in
                              requests.get(os.environ['ECS_CONTAINER_METADATA_URI']).json()[
                                  'Networks']

@@ -15,7 +15,7 @@ def _get_ssm_key(name):
 
 SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 

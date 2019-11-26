@@ -15,7 +15,7 @@ def _get_ssm_key(name):
 
 SECRET_KEY = _get_ssm_key('/Dev/WebServer/Secret')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'percdev.eu-west-1.elasticbeanstalk.com',

@@ -5,10 +5,8 @@ fake = Faker()
 
 def getGrantBasic(foundation_name):
     return {
-        "Foundation": {
-            "Name": foundation_name
-        },
         "Grant": {
+            "FoundationName": foundation_name,
             "title": fake.company(),
             "description": fake.paragraph(),
             "minAmountPerGrantee": fake.random_int(0, 9999)
@@ -18,10 +16,8 @@ def getGrantBasic(foundation_name):
 
 def getGrantComplete(foundation_name):
     return {
-        "Foundation": {
-            "Name": foundation_name
-        },
         "Grant": {
+            "FoundationName": foundation_name,
             "title": fake.company(),
             "description": fake.paragraph(),
             "minAmountPerGrantee": fake.random_int(0, 9999),

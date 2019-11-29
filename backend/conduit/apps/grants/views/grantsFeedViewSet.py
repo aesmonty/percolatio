@@ -18,17 +18,11 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT, description='Foundation',
-                                                                properties={
-                                                                    'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
-                                                                }),
-                                   }
-
-
 GRANT_DOCUMENTATION_SCHEMA = {'Grant': openapi.Schema(type=openapi.TYPE_OBJECT, description='Grant',
                                                       required=[
-                                                          'title', 'description', 'minAmountPerGrantee'],
+                                                          'FoundationName','title', 'description', 'minAmountPerGrantee'],
                                                       properties={
+                                                          'FoundationName': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name"),
                                                           'title': openapi.Schema(type=openapi.TYPE_STRING, description="Grant Name"),
                                                           'description': openapi.Schema(type=openapi.TYPE_STRING, description="Grant Description"),
                                                           'minAmountPerGrantee': openapi.Schema(type=openapi.TYPE_INTEGER, description="Min Amount of money awarded to each grant winner"),
@@ -118,7 +112,6 @@ class GrantsViewSet(mixins.CreateModelMixin,
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            **FOUDNATION_DOCUMENTATION_SCHEMA,
             **GRANT_DOCUMENTATION_SCHEMA
         }),
         responses={
@@ -130,12 +123,12 @@ class GrantsViewSet(mixins.CreateModelMixin,
         ---
         """
 
-        foundation = request.data.get('Foundation', None)
+        grant = request.data.get('Grant', None)
+    
+        if grant is None:
+            raise ParseError("A grant object is required.")
 
-        if foundation is None or foundation["Name"] is None:
-            raise ParseError("Could not parse foundation name")
-
-        foundations_name = foundation["Name"]
+        foundations_name = grant["FoundationName"]
 
         try:
             foundation = Foundation.objects.get(
@@ -145,8 +138,10 @@ class GrantsViewSet(mixins.CreateModelMixin,
                 "A foundation with name: {} does not exist.".format(foundations_name))
 
         self.check_object_permissions(self.request, foundation)
+        
+        # We do not need foundation name so we might as well delete it.
+        del grant["FoundationName"]
 
-        grant = request.data.get('Grant', {})
         serializer_context = {
             'foundation': foundation,
             'request': request
@@ -213,7 +208,7 @@ class GrantsViewSet(mixins.CreateModelMixin,
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        properties=FOUDNATION_DOCUMENTATION_SCHEMA,
+        properties=GRANT_DOCUMENTATION_SCHEMA,
         responses={
             403: 'Not Authorized',
             404: 'Grant not found'

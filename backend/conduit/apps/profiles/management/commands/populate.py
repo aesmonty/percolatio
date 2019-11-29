@@ -10,10 +10,10 @@ class Command(BaseCommand):
     help = 'Populates the percolatio db'
 
     def add_arguments(self, parser):
-        parser.add_argument('-u','--username', help='User name', required=True)
-        parser.add_argument('-p','--password', help='User password', required=True)
-        parser.add_argument('-e','--email', help='User email', required=True)
-        parser.add_argument('-z','--url', help='Endpoint', required=False, default = "http://127.0.0.1:8000")
+        parser.add_argument('-u','--username', help='User name. e.g. sotirisnan', required=True)
+        parser.add_argument('-p','--password', help='User password. e.g. password', required=True)
+        parser.add_argument('-e','--email', help='User email. e.g. sotiris@percolatio.com', required=True)
+        parser.add_argument('-z','--url', help='Endpoint e.g. http://127.0.0.1:8000 or http://percdev.eu-west-1.elasticbeanstalk.com', required=False, default = "http://127.0.0.1:8000")
 
     def handle(self, *args, **options):
         

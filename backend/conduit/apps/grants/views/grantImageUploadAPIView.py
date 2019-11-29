@@ -25,7 +25,7 @@ class GrantImageUploadView(APIView):
             grant = Grant.objects.get(slug=grantSlug)
         except Grant.DoesNotExist:
             raise NotFound(
-                "A grant with slug equal to {} does not exist.".format(pk))
+                "A grant with slug equal to {} does not exist.".format(grantSlug))
 
         self.check_object_permissions(self.request, grant.foundation)
         grant_image = request.data['file']
@@ -39,7 +39,7 @@ class GrantImageUploadView(APIView):
             grant = Grant.objects.get(slug=grantSlug)
         except Grant.DoesNotExist:
             raise NotFound(
-                "A grant with slug equal to {} does not exist.".format(pk))
+                "A grant with slug equal to {} does not exist.".format(grantSlug))
 
         self.check_object_permissions(self.request, grant.foundation)
         grant.img.delete(save=False)

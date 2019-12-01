@@ -7,7 +7,9 @@ from .views import (
     GrantsViewSet,
     GrantsFeedView,
     GrantsFavoriteAPIView,
-    ApplicantsListAPIView, ApplicationDestroyAPIView
+    GrantImageUploadView,
+    ApplicantsListAPIView,
+    ApplicationDestroyAPIView
 )
 
 router = DefaultRouter(trailing_slash=False)
@@ -19,7 +21,8 @@ urlpatterns = [
     path('', include(router.urls)),
 
     url('grants/feed/', GrantsFeedView.as_view()),
-
+    path('grants/<slug:grantSlug>/upload/<filename>',
+         GrantImageUploadView.as_view(), name='upload'),
     path('grants/<slug:grantSlug>/favorite/',
          GrantsFavoriteAPIView.as_view(), name='grantFavorite'),
     path('grants/<slug:grantSlug>/applicants/<int:id>/',

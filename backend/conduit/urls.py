@@ -21,9 +21,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('', include('conduit.apps.ping.urls', namespace='ping')),
     path('admin/', admin.site.urls),
-
-    path('ping/', include('conduit.apps.ping.urls', namespace='ping')),
 
     path('api/', include('conduit.apps.articles.urls', namespace='articles')),
     path('api/', include('conduit.apps.authentication.urls',

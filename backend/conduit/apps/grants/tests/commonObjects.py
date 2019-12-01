@@ -1,26 +1,35 @@
 
-import datetime
+from faker import Faker
+fake = Faker()
 
 
-def getTestGrant(foundation_name):
-
+def getGrantBasic(foundation_name):
     return {
-        "Foundation": {
-            "Name": foundation_name
-        },
-
         "Grant": {
-            "title": "Test grant is the best",
-            "tagList": ["test_tag_1", "test_tag_2"],
-            "numberOfGrantees": "1",
-            "nonFinancialRewards": True,
-            "description": "Lorem ipsum",
-            "externalWebsite": "https://stackoverflow.com/",
-            "otherDetails": 'Another detail',
-            # Optional Parameters
-            "isPreFunded": True,
-            "amountPerGrantee": "10000",
-            "applicationsStartDate": str(datetime.date.today()),
-            "applicationsEndDate": str(datetime.date.today() + datetime.timedelta(days=7)),
+            "FoundationName": foundation_name,
+            "title": fake.company(),
+            "description": fake.paragraph(),
+            "minAmountPerGrantee": fake.random_int(0, 9999),
+            "tagList": [],
+            'externalWebsite': None,
+            'otherAwards': None,
+            'otherDetails': None,
+        }
+    }
+
+
+def getGrantComplete(foundation_name):
+    return {
+        "Grant": {
+            "FoundationName": foundation_name,
+            "title": fake.company(),
+            "description": fake.paragraph(),
+            "minAmountPerGrantee": fake.random_int(0, 9999),
+            "state": fake.random_int(1, 5),
+            "tagList": fake.words(nb=3, ext_word_list=None, unique=True),
+            'externalWebsite': fake.uri(),
+            'allowDonations': bool(fake.random_int(0, 1)),
+            'otherAwards': fake.paragraph(),
+            'otherDetails': fake.paragraph(),
         }
     }

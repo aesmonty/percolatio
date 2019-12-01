@@ -15,7 +15,7 @@ class FollowingAPIView(RetrieveAPIView):
     permission_classes = (AllowAny,)
     queryset = Profile.objects.select_related('user')
     renderer_classes = (FoundationJSONRenderer,)
-    foundation_serializer = FoundationSerializer
+    serializer_class = FoundationSerializer
 
     def retrieve(self, request, username, *args, **kwargs):
         # NOTE: This query set can easily be modified to return only the foundations
@@ -24,7 +24,7 @@ class FollowingAPIView(RetrieveAPIView):
         page = self.paginate_queryset(queryset)
 
         serializer_context = {'request': request}
-        serializer = self.foundation_serializer(
+        serializer = self.serializer_class(
             page, context=serializer_context, many=True
         )
 

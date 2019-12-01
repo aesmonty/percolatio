@@ -1,12 +1,26 @@
 from django.db import models
-import uuid
+import os
+from django.utils.timezone import now
 
 from conduit.apps.core.models import TimestampedModel
 
 
+def upload_image_to(instance, filename):
+    return 'foundation/%s/%s' % (
+        now().strftime("%Y%m%d"),
+        instance.id
+    )
+
+
 class Foundation(TimestampedModel):
     name = models.CharField(db_index=True, max_length=255, unique=True)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    img = models.FileField(
+        upload_to=upload_image_to,
+        blank=True,
+        editable=True)
 
     # Every foundation must have at least one founder.
     founder = models.ForeignKey(

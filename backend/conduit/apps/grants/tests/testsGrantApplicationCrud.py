@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase, APIClient
 from conduit.apps.foundations.models import Foundation
 from conduit.apps.profiles.models import Profile
 
-from .commonObjects import getTestGrant
+from .commonObjects import getGrantComplete, fake
 
 
 class ApplicantsListAPIViewTestCase(APITestCase):
@@ -17,33 +17,33 @@ class ApplicantsListAPIViewTestCase(APITestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            'davinci', 'davinci@mail.com', 'password')
-        self.foundation_name = 'davinciFoundation'
+            fake.user_name(),
+            fake.email(),
+            fake.text(max_nb_chars=14))
         self.client = APIClient()
         self.client.force_authenticate(self.user)
-        self.profile = Profile.objects.get(user=self.user)
-        self.foundation = Foundation.objects.create(
-            founder=self.profile,
-            name=self.foundation_name,
-            description='foo')
 
-        self.grant = getTestGrant(self.foundation_name)
+        self.foundation_name = fake.company()
+        self.foundation = Foundation.objects.create(
+            founder=self.user.profile,
+            name=self.foundation_name,
+            description=fake.paragraph())
+
+        otherUser = get_user_model().objects.create_user(
+            fake.user_name(),
+            fake.email(),
+            fake.text(max_nb_chars=14))
+        self.otherClient = APIClient()
+        self.otherClient.credentials(
+            HTTP_AUTHORIZATION='Token ' + otherUser.token)
+
+        self.grant = getGrantComplete(self.foundation_name)
 
         self.application = {
             "application": {
                 "body": "this is why I am applying to this grant"
             }
         }
-
-        self.make_mal_client()
-
-    def make_mal_client(self):
-        # create a mal user
-        self.otherUser = get_user_model().objects.create_user(
-            'mal', 'mal@mail.com', 'password')
-        self.otherClient = APIClient()
-        self.otherClient.credentials(
-            HTTP_AUTHORIZATION='Token ' + self.otherUser.token)
 
     def create_grant(self):
         response = self.client.post(

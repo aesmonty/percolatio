@@ -16,10 +16,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_bio(self, obj):
         if obj.bio:
             return obj.bio
-        # TODO: this needs to be changed to None. Keeping it now for debugging.
-        return "The user has no bio"
+        return None
 
     def get_image(self, obj):
         if obj.image:
             return obj.image
-        return 'https://static.productionready.io/images/smiley-cyrus.jpg'
+        return None

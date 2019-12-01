@@ -9,8 +9,13 @@ from .relations import TagRelatedField
 class FoundationSerializer(serializers.ModelSerializer):
     name = serializers.CharField()  # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
+    website = serializers.URLField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        default=None)
 
-    # TODO: Update to List of Profiles!!!
+    # TODO: See issue #22
     grantees = serializers.CharField(required=False)
 
     tagList = TagRelatedField(many=True, required=False, source='tags')
@@ -23,22 +28,24 @@ class FoundationSerializer(serializers.ModelSerializer):
         method_name='get_followers_count'
     )
 
-    founder = ProfileSerializer(read_only=True)
+    img = serializers.SerializerMethodField(method_name='get_image_link')
 
-    # TODO: Serialize grantees field in Foundation? Maybe need to create smth like TagRelatedField
+    founder = ProfileSerializer(read_only=True)
 
     class Meta:
         model = Foundation
         fields = (
             'name',
             'description',
+            'website',
             'createdAt',
             'founder',
             'grantees',
             'followed',
             'followersCount',
+            'img',
             'tagList',
-            'updatedAt',
+            'updatedAt'
         )
 
     def create(self, validated_data):
@@ -71,6 +78,11 @@ class FoundationSerializer(serializers.ModelSerializer):
 
     def get_updated_at(self, instance):
         return instance.updated_at.isoformat()
+
+    def get_image_link(self, instance):
+        if instance.img and hasattr(instance.img, 'url'):
+            return instance.img.base_url
+        return ''
 
 
 class TagSerializer(serializers.ModelSerializer):

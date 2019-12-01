@@ -4,6 +4,7 @@ from rest_framework.permissions import (BasePermission)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .foundationPermissions import IsFoundationOwnerOrReadOnly
 from ..models import Foundation, Tag
 from ..renderers import FoundationJSONRenderer
 from ..serializers import FoundationSerializer, TagSerializer
@@ -12,23 +13,16 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT, description='Foundation',
+FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                                required=[
+                                                                    'Name', 'Description'],
                                                                 properties={
-                                                                    'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
+                                                                    'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name"),
+                                                                    'Description': openapi.Schema(type=openapi.TYPE_STRING, description="Description"),
+                                                                    'Website': openapi.Schema(type=openapi.TYPE_STRING, description="Existing website of the foundation"),
+                                                                    'TagList': openapi.Schema(type=openapi.TYPE_ARRAY, description="Foundation tags. E.g. open source, Artificial Intelligence", items=openapi.Items(type=openapi.TYPE_STRING)),
                                                                 }),
-                                   'Description': openapi.Schema(type=openapi.TYPE_OBJECT, description='A description for the foundation',
-                                                                 properties={
-                                                                     'Name': openapi.Schema(type=openapi.TYPE_STRING, description="Foundation Name")
-                                                                 }),
                                    }
-
-
-class IsFoundationOwnerOrReadOnly(BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.founder.user == request.user
 
 
 class FoundationViewSet(mixins.CreateModelMixin,
@@ -63,7 +57,9 @@ class FoundationViewSet(mixins.CreateModelMixin,
         404: 'Incorrect body',
         403: 'Not Authorized'})
     def create(self, request):
-
+        '''
+        Create a new foundation
+        '''
         context = {
             'founder': request.user.profile,
             'request': request
@@ -83,7 +79,13 @@ class FoundationViewSet(mixins.CreateModelMixin,
 
     @swagger_auto_schema(manual_parameters=[
                          openapi.Parameter(
-                             'founder', openapi.IN_QUERY,  description='Select foundations based on the founder',  type=openapi.TYPE_STRING, example="davinci"),
+                             'founder', openapi.IN_QUERY,
+                             description='Select foundations based on the founder name',
+                             type=openapi.TYPE_STRING),
+                         openapi.Parameter(
+                             'tag', openapi.IN_QUERY,
+                             description='Select foundations based on a tag',
+                             type=openapi.TYPE_STRING)
                          ])
     def list(self, request):
         serializer_context = {'request': request}

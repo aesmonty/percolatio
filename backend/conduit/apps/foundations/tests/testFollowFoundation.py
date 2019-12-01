@@ -8,29 +8,28 @@ from rest_framework.test import APITestCase, APIClient
 from ..models import Foundation
 from ..serializers import FoundationSerializer
 
+from .common import getFoundationBasic, getFoundationComplete, fake
+
 
 class ProfileFollowAPIViewTestCase(APITestCase):
-    foundation_name = 'davinciFoundation'
+    foundation_name = fake.company()
     createUrl = reverse("foundations:foundations-list")
     url = reverse("foundations:follow", kwargs={'name': foundation_name})
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            'davinci', 'davinci@mail.com', 'password')
-        self.foundation = {
-            'foundation': {
-                'name': self.foundation_name,
-                'description': 'an amazing foundation'
-            }
-        }
+            fake.user_name(),
+            fake.email(),
+            fake.text(max_nb_chars=14))
         self.client = APIClient()
         self.client.force_authenticate(self.user)
-        self.createFoundation(self.foundation)
+        self.createFoundation(getFoundationComplete(
+            foundation_name=self.foundation_name))
 
     def createFoundation(self, foundation):
         response = self.client.post(
             self.createUrl,
-            json.dumps(self.foundation),
+            json.dumps(foundation),
             content_type='application/json')
         self.assertEqual(201, response.status_code)
         return response

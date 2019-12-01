@@ -14,8 +14,8 @@ def upload_image_to(instance, filename):
 
 class Foundation(TimestampedModel):
     name = models.CharField(db_index=True, max_length=255, unique=True)
-    description = models.TextField()
-    website = models.URLField()
+    description = models.TextField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     img = models.FileField(
         upload_to=upload_image_to,

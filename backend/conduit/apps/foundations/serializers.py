@@ -9,7 +9,11 @@ from .relations import TagRelatedField
 class FoundationSerializer(serializers.ModelSerializer):
     name = serializers.CharField()  # TODO: Not sure if this should be read_only
     description = serializers.CharField(required=False)
-    website = serializers.URLField(required=False)
+    website = serializers.URLField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        default=None)
 
     # TODO: See issue #22
     grantees = serializers.CharField(required=False)

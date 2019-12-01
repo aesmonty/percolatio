@@ -9,7 +9,11 @@ def getGrantBasic(foundation_name):
             "FoundationName": foundation_name,
             "title": fake.company(),
             "description": fake.paragraph(),
-            "minAmountPerGrantee": fake.random_int(0, 9999)
+            "minAmountPerGrantee": fake.random_int(0, 9999),
+            "tagList": [],
+            'externalWebsite': None,
+            'otherAwards': None,
+            'otherDetails': None,
         }
     }
 

@@ -6,7 +6,8 @@ def getFoundationBasic(foundation_name=None):
     return {
         'foundation': {
             'name': foundation_name or fake.company(),
-            'description': fake.paragraph()
+            'description': fake.paragraph(),
+            'website': None
         }
     }
 

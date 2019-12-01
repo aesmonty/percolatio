@@ -29,10 +29,22 @@ class GrantSerializer(serializers.ModelSerializer):
         default=GrantState.RAISING,
         validators=[MinValueValidator(1), MaxValueValidator(5)])  # TODO: Validators
     tagList = TagRelatedField(many=True, required=False, source='tags')
-    externalWebsite = serializers.URLField(required=False, default=None)
-    allowDonations = serializers.BooleanField(required=False, default=True)
-    otherAwards = serializers.CharField(required=False)
-    otherDetails = serializers.CharField(required=False)
+    externalWebsite = serializers.URLField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        default=None)
+    allowDonations = serializers.BooleanField(
+        required=False,
+        default=True)
+    otherAwards = serializers.CharField(required=False,
+                                        allow_blank=True,
+                                        allow_null=True,
+                                        default=None)
+    otherDetails = serializers.CharField(required=False,
+                                         allow_blank=True,
+                                         allow_null=True,
+                                         default=None)
 
     # Fields generated from other models
     favorited = serializers.SerializerMethodField()

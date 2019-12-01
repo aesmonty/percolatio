@@ -12,6 +12,7 @@ from ..serializers import FoundationSerializer, TagSerializer
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+import json
 
 
 FOUDNATION_DOCUMENTATION_SCHEMA = {'Foundation': openapi.Schema(type=openapi.TYPE_OBJECT,
@@ -78,8 +79,9 @@ class FoundationViewSet(mixins.CreateModelMixin,
         try:
             foundation_serialized.save()
         except IntegrityError as e:
-            print(e)
-            return Response(status=status.HTTP_409_CONFLICT)
+            return Response({
+                "errors": str(e)
+            }, status=status.HTTP_409_CONFLICT)
 
         return Response(foundation_serialized.data, status=status.HTTP_201_CREATED)
 

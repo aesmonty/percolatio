@@ -18,11 +18,6 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = (
-    '0.0.0.0:4000',
-    'localhost:4000',
-    'localhost:4100',
-    'localhost:8000'
-)
+CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")

@@ -10,6 +10,9 @@ class ConduitJSONRenderer(JSONRenderer):
     pagination_object_count = 'count'
 
     def render(self, data, media_type=None, renderer_context=None):
+        if data is None:
+            return super(ConduitJSONRenderer, self).render(data)
+
         if data.get('results', None) is not None:
             return json.dumps({
                 self.pagination_object_label: data['results'],

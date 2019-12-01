@@ -3,6 +3,7 @@ from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import (BasePermission)
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.utils import IntegrityError
 
 from .foundationPermissions import IsFoundationOwnerOrReadOnly
 from ..models import Foundation, Tag
@@ -74,7 +75,12 @@ class FoundationViewSet(mixins.CreateModelMixin,
         )
 
         foundation_serialized.is_valid(raise_exception=True)
-        foundation_serialized.save()
+        try:
+            foundation_serialized.save()
+        except IntegrityError as e:
+            print(e)
+            return Response(status=status.HTTP_409_CONFLICT)
+
         return Response(foundation_serialized.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(manual_parameters=[

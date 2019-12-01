@@ -40,6 +40,15 @@ class FoundationViewSetTestCase(APITestCase):
         self.createFoundation(getFoundationBasic())
         self.createFoundation(getFoundationComplete())
 
+    def test_create_foundation_should_fail_when_name_already_exists(self):
+        test_foundation_name = fake.company()
+        self.createFoundation(getFoundationBasic(test_foundation_name))
+        response = self.client.post(
+            self.url,
+            json.dumps(getFoundationBasic(test_foundation_name)),
+            content_type='application/json')
+        self.assertEqual(409, response.status_code)
+
     def test_list_foundation(self):
         count = 10
         for _ in range(0, count):

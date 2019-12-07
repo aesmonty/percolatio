@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase, APIClient
 from conduit.apps.foundations.models import Foundation
 from conduit.apps.profiles.models import Profile
 
-from .commonObjects import getGrantComplete, fake
+from .common import getGrantComplete, fake
 
 
 class ApplicantsListAPIViewTestCase(APITestCase):
